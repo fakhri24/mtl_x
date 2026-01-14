@@ -22,7 +22,7 @@ window.MathJax = {
 
 <div class="mb-4">
   <span class="font-semibold">Level:</span>
-  <span id="levelDisplay">0</span>
+  <span id="levelDisplay">6</span>
 </div>
 
 <div id="question" class="text-lg mb-4"></div>
@@ -41,7 +41,7 @@ Cek Jawaban
 </div>
 
 <script>
-let level = 6;
+let level = 0;
 let correctStreak = 0;
 let wrongStreak = 0;
 let currentAnswer = "";
@@ -121,7 +121,7 @@ function checkAnswer(){
       wrongStreak=0;
     }
   }
-  document.getElementById("levelDisplay").innerText = level;
+  document.getElementById("levelDisplay").innerText = level+6;
   loadQuestion();
 }
 
