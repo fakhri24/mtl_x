@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Latihan Adaptif Persamaan Eksponen (110 Soal)</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body class="bg-gray-100 p-6">
+<div class="max-w-3xl mx-auto bg-white p-6 rounded-xl shadow">
+
+<h1 class="text-2xl font-bold mb-2">Latihan Adaptif Persamaan Eksponen</h1>
+<p class="mb-4 text-gray-600">110 soal • Level naik/turun otomatis</p>
+
+<div class="mb-4">
+  <span class="font-semibold">Level:</span>
+  <span id="levelDisplay">0</span>
+</div>
+
+<div id="question" class="text-lg mb-4"></div>
+
+<input id="answer" type="text"
+class="border p-2 w-full mb-4 rounded"
+placeholder="Masukkan jawaban">
+
+<button onclick="checkAnswer()"
+class="bg-blue-600 text-white px-4 py-2 rounded">
+Cek Jawaban
+</button>
+
+<div id="feedback" class="mt-4 font-semibold"></div>
+
+</div>
+
+<script>
+let level = 0;
+let correctStreak = 0;
+let wrongStreak = 0;
+let currentAnswer = "";
+
+const questions = [
+
+/* ================= LEVEL 0 (20 SOAL) ================= */
+[
+  {q:"Tentukan nilai $2^4$", a:"16"},
+  {q:"Tentukan nilai $3^3$", a:"27"},
+  {q:"Tentukan nilai $5^2$", a:"25"},
+  {q:"Ubah 8 ke bentuk $2^n$. Tentukan $n$.", a:"3"},
+  {q:"Ubah 16 ke bentuk $2^n$. Tentukan $n$.", a:"4"},
+  {q:"Ubah 27 ke bentuk $3^n$. Tentukan $n$.", a:"3"},
+  {q:"Tentukan nilai $4^2$", a:"16"},
+  {q:"Tentukan nilai $10^0$", a:"1"},
+  {q:"Ubah 1 ke bentuk $2^n$. Tentukan $n$.", a:"0"},
+  {q:"Tentukan nilai $(2^3)^2$", a:"64"},
+  {q:"Tentukan nilai $2^3 \\cdot 2^2$", a:"32"},
+  {q:"Tentukan nilai $3^2 \\cdot 3$", a:"27"},
+  {q:"Ubah 9 ke bentuk $3^n$. Tentukan $n$.", a:"2"},
+  {q:"Tentukan nilai $5^1$", a:"5"},
+  {q:"Tentukan nilai $(4^1)^3$", a:"64"},
+  {q:"Tentukan nilai $2^5$", a:"32"},
+  {q:"Ubah 32 ke bentuk $2^n$. Tentukan $n$.", a:"5"},
+  {q:"Tentukan nilai $6^0$", a:"1"},
+  {q:"Tentukan nilai $7^1$", a:"7"},
+  {q:"Tentukan nilai $1^5$", a:"1"}
+],
+
+/* ================= LEVEL 1 (20 SOAL) ================= */
+[
+  {q:"Tentukan $x$ dari $2^x=8$", a:"3"},
+  {q:"Tentukan $x$ dari $3^x=27$", a:"3"},
+  {q:"Tentukan $x$ dari $5^x=25$", a:"2"},
+  {q:"Tentukan $x$ dari $4^x=16$", a:"2"},
+  {q:"Tentukan $x$ dari $10^x=100$", a:"2"},
+  {q:"Tentukan $x$ dari $2^x=1$", a:"0"},
+  {q:"Tentukan $x$ dari $3^x=1$", a:"0"},
+  {q:"Tentukan $x$ dari $9^x=3$", a:"0.5"},
+  {q:"Tentukan $x$ dari $8^x=2$", a:"0.333"},
+  {q:"Tentukan $x$ dari $16^x=4$", a:"0.5"},
+  {q:"Tentukan $x$ dari $25^x=5$", a:"0.5"},
+  {q:"Tentukan $x$ dari $27^x=9$", a:"0.666"},
+  {q:"Tentukan $x$ dari $32^x=2$", a:"0.2"},
+  {q:"Tentukan $x$ dari $81^x=9$", a:"0.5"},
+  {q:"Tentukan $x$ dari $49^x=7$", a:"0.5"},
+  {q:"Tentukan $x$ dari $64^x=8$", a:"0.5"},
+  {q:"Tentukan $x$ dari $4^x=2$", a:"0.5"},
+  {q:"Tentukan $x$ dari $9^x=27$", a:"1.5"},
+  {q:"Tentukan $x$ dari $2^x=32$", a:"5"},
+  {q:"Tentukan $x$ dari $3^x=81$", a:"4"}
+],
+
+/* ================= LEVEL 2 (20 SOAL) ================= */
+[
+  {q:"Tentukan $x$ dari $4^x=2^{2x}$", a:"semua"},
+  {q:"Tentukan $x$ dari $8^x=2^{3x}$", a:"semua"},
+  {q:"Tentukan $x$ dari $9^x=3^{2x}$", a:"semua"},
+  {q:"Tentukan $x$ dari $27^x=3^{3x}$", a:"semua"},
+  {q:"Tentukan $x$ dari $16^x=2^{4x}$", a:"semua"},
+  {q:"Tentukan $x$ dari $4^x=8$", a:"1.5"},
+  {q:"Tentukan $x$ dari $8^x=4$", a:"0.666"},
+  {q:"Tentukan $x$ dari $9^x=27$", a:"1.5"},
+  {q:"Tentukan $x$ dari $16^x=8$", a:"0.75"},
+  {q:"Tentukan $x$ dari $32^x=4$", a:"0.4"},
+  {q:"Tentukan $x$ dari $25^x=125$", a:"1.5"},
+  {q:"Tentukan $x$ dari $27^x=81$", a:"1.333"},
+  {q:"Tentukan $x$ dari $64^x=16$", a:"0.666"},
+  {q:"Tentukan $x$ dari $81^x=3$", a:"0.25"},
+  {q:"Tentukan $x$ dari $49^x=7$", a:"0.5"},
+  {q:"Tentukan $x$ dari $4^x=32$", a:"2.5"},
+  {q:"Tentukan $x$ dari $8^x=64$", a:"2"},
+  {q:"Tentukan $x$ dari $9^x=243$", a:"2.5"},
+  {q:"Tentukan $x$ dari $16^x=256$", a:"2"},
+  {q:"Tentukan $x$ dari $25^x=625$", a:"2"}
+],
+
+/* ================= LEVEL 3 (20 SOAL) ================= */
+[
+  {q:"Tentukan $x$ dari $2^{x+1}=16$", a:"3"},
+  {q:"Tentukan $x$ dari $3^{x-1}=9$", a:"3"},
+  {q:"Tentukan $x$ dari $5^{x+2}=125$", a:"1"},
+  {q:"Tentukan $x$ dari $4^{x-1}=16$", a:"3"},
+  {q:"Tentukan $x$ dari $2^{2x}=32$", a:"2.5"},
+  {q:"Tentukan $x$ dari $3^{2x}=81$", a:"2"},
+  {q:"Tentukan $x$ dari $5^{2x}=25$", a:"1"},
+  {q:"Tentukan $x$ dari $4^{2x}=64$", a:"1.5"},
+  {q:"Tentukan $x$ dari $2^{3x}=8$", a:"1"},
+  {q:"Tentukan $x$ dari $3^{3x}=27$", a:"1"},
+  {q:"Tentukan $x$ dari $5^{x-1}=1$", a:"1"},
+  {q:"Tentukan $x$ dari $4^{x+2}=64$", a:"1"},
+  {q:"Tentukan $x$ dari $2^{x-2}=4$", a:"4"},
+  {q:"Tentukan $x$ dari $3^{x+1}=81$", a:"3"},
+  {q:"Tentukan $x$ dari $5^{x-2}=25$", a:"4"},
+  {q:"Tentukan $x$ dari $4^{x+1}=256$", a:"3"},
+  {q:"Tentukan $x$ dari $2^{2x-1}=16$", a:"2.5"},
+  {q:"Tentukan $x$ dari $3^{2x+1}=81$", a:"1.5"},
+  {q:"Tentukan $x$ dari $5^{x+1}=125$", a:"2"},
+  {q:"Tentukan $x$ dari $4^{2x-2}=16$", a:"2"}
+],
+
+/* ================= LEVEL 4 (15 SOAL) ================= */
+[
+  {q:"Tentukan $x$ dari $2^{x^2}=4^x$", a:"0,2"},
+  {q:"Tentukan $x$ dari $3^{x^2}=9^x$", a:"0,2"},
+  {q:"Tentukan $x$ dari $4^{x^2}=2^{2x}$", a:"0,1"},
+  {q:"Tentukan $x$ dari $9^{x^2}=3^{2x}$", a:"0,1"},
+  {q:"Tentukan $x$ dari $16^{x^2}=2^{4x}$", a:"0,1"},
+  {q:"Tentukan $x$ dari $2^{x(x-1)}=4$", a:"-1,2"},
+  {q:"Tentukan $x$ dari $3^{x(x-1)}=9$", a:"-1,2"},
+  {q:"Tentukan $x$ dari $4^{x(x-1)}=16$", a:"-1,2"},
+  {q:"Tentukan $x$ dari $5^{x^2}=25$", a:"-1.414,1.414"},
+  {q:"Tentukan $x$ dari $2^{x^2}=16$", a:"-2,2"},
+  {q:"Tentukan $x$ dari $3^{x^2}=27$", a:"-1.732,1.732"},
+  {q:"Tentukan $x$ dari $4^{x^2}=64$", a:"-1.732,1.732"},
+  {q:"Tentukan $x$ dari $9^{x^2}=81$", a:"-1.414,1.414"},
+  {q:"Tentukan $x$ dari $16^{x^2}=256$", a:"-1.414,1.414"},
+  {q:"Tentukan $x$ dari $25^{x^2}=125$", a:"-1.225,1.225"}
+],
+
+/* ================= LEVEL 5 (15 SOAL) ================= */
+[
+  {q:"Tentukan $x$ dari $5^{x-1}+5^x=150$", a:"2"},
+  {q:"Tentukan $x$ dari $2^x+2^{x+1}=12$", a:"2"},
+  {q:"Tentukan $x$ dari $3^x+3^{x+1}=36$", a:"2"},
+  {q:"Tentukan $x$ dari $4^x+4^{x-1}=20$", a:"2"},
+  {q:"Tentukan $x$ dari $5^x-5^{x-1}=100$", a:"3"},
+  {q:"Tentukan $x$ dari $2^{x+2}-2^x=12$", a:"2"},
+  {q:"Tentukan $x$ dari $3^{x+1}-3^x=18$", a:"2"},
+  {q:"Tentukan $x$ dari $4^{x+1}-4^x=48$", a:"2"},
+  {q:"Tentukan $x$ dari $5^{x+1}-5^x=100$", a:"2"},
+  {q:"Tentukan $x$ dari $2^x(1+2)=24$", a:"3"},
+  {q:"Tentukan $x$ dari $3^x(1+3)=108$", a:"3"},
+  {q:"Tentukan $x$ dari $4^x(1+4)=320$", a:"3"},
+  {q:"Tentukan $x$ dari $5^x(1+5)=750$", a:"3"},
+  {q:"Tentukan $x$ dari $2^{x-1}(2+1)=12$", a:"3"},
+  {q:"Tentukan $x$ dari $3^{x-1}(3+1)=36$", a:"3"}
+]
+
+];
+
+function loadQuestion(){
+  const qset = questions[level];
+  const item = qset[Math.floor(Math.random()*qset.length)];
+  document.getElementById("question").innerHTML = item.q;
+  currentAnswer = item.a;
+  document.getElementById("answer").value = "";
+  MathJax.typeset();
+}
+
+function checkAnswer(){
+  const user = document.getElementById("answer").value.replace(/\s+/g,'');
+  const correct = currentAnswer.replace(/\s+/g,'');
+
+  if(user === correct){
+    correctStreak++;
+    wrongStreak = 0;
+    document.getElementById("feedback").innerText = "✅ Benar";
+    if(correctStreak>=2 && level<questions.length-1){
+      level++;
+      correctStreak=0;
+    }
+  }else{
+    wrongStreak++;
+    correctStreak=0;
+    document.getElementById("feedback").innerText = "❌ Salah";
+    if(wrongStreak>=2 && level>0){
+      level--;
+      wrongStreak=0;
+    }
+  }
+  document.getElementById("levelDisplay").innerText = level;
+  loadQuestion();
+}
+
+loadQuestion();
+</script>
+</body>
+</html>
