@@ -25,6 +25,17 @@ window.MathJax = {
   <span id="levelDisplay">0</span>
 </div>
 
+<div class="mb-4 text-sm text-gray-600">
+  <div>Total Soal: <span id="totalAnswered">0</span></div>
+  <div>Benar: <span id="totalCorrect">0</span></div>
+  <div>Terakhir belajar: <span id="lastAccess">-</span></div>
+</div>
+
+<button onclick="resetProgress()"
+class="text-sm text-red-600 underline mb-4">
+Reset Progres
+</button>
+
 <div id="question" class="text-lg mb-4"></div>
 
 <input id="answer" type="text"
@@ -45,6 +56,8 @@ let level = 0;
 let correctStreak = 0;
 let wrongStreak = 0;
 let currentAnswer = "";
+let totalAnswered = 0;
+let totalCorrect = 0;
 
 const questions = [
 
@@ -184,6 +197,38 @@ const questions = [
 
 ];
 
+const STORAGE_KEY = "progress_eksponen";
+
+function saveProgress(){
+  const data = {
+    level,
+    correctStreak,
+    wrongStreak,
+    totalAnswered,
+    totalCorrect,
+    lastAccess: new Date().toLocaleString("id-ID")
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function loadProgress(){
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if(saved){
+    const data = JSON.parse(saved);
+    level = data.level ?? 0;
+    correctStreak = data.correctStreak ?? 0;
+    wrongStreak = data.wrongStreak ?? 0;
+    totalAnswered = data.totalAnswered ?? 0;
+    totalCorrect = data.totalCorrect ?? 0;
+    document.getElementById("lastAccess").innerText = data.lastAccess ?? "-";
+  }
+}
+
+function resetProgress(){
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
+}
+
 function loadQuestion(){
   const qset = questions[level];
   const item = qset[Math.floor(Math.random()*qset.length)];
@@ -197,10 +242,14 @@ function checkAnswer(){
   const user = document.getElementById("answer").value.replace(/\s+/g,'');
   const correct = currentAnswer.replace(/\s+/g,'');
 
+  totalAnswered++;
+
   if(user === correct){
     correctStreak++;
     wrongStreak = 0;
+    totalCorrect++;
     document.getElementById("feedback").innerText = "✅ Benar";
+
     if(correctStreak>=2 && level<questions.length-1){
       level++;
       correctStreak=0;
@@ -209,16 +258,27 @@ function checkAnswer(){
     wrongStreak++;
     correctStreak=0;
     document.getElementById("feedback").innerText = "❌ Salah";
+
     if(wrongStreak>=2 && level>0){
       level--;
       wrongStreak=0;
     }
   }
+
   document.getElementById("levelDisplay").innerText = level;
+  document.getElementById("totalAnswered").innerText = totalAnswered;
+  document.getElementById("totalCorrect").innerText = totalCorrect;
+
+  saveProgress();
   loadQuestion();
 }
 
+loadProgress();
+document.getElementById("levelDisplay").innerText = level;
+document.getElementById("totalAnswered").innerText = totalAnswered;
+document.getElementById("totalCorrect").innerText = totalCorrect;
 loadQuestion();
+
 </script>
 </body>
 </html>
