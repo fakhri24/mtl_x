@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Latihan Adaptif Pertidaksamaan Eksponen</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body class="bg-gray-100 p-6">
+<div class="max-w-3xl mx-auto bg-white p-6 rounded-xl shadow">
+
+<h1 class="text-2xl font-bold mb-2">Latihan Adaptif Pertidaksamaan Eksponen</h1>
+<p class="mb-4 text-gray-600">Tulis 2 SOAL dan PEMBAHASAN untuk setiap levelnya.</p>
+
+<div class="mb-4">
+  <span class="font-semibold">Level:</span>
+  <span id="levelDisplay">0</span>
+</div>
+
+<div class="mb-4 text-sm text-gray-600">
+  <div>Total Soal: <span id="totalAnswered">0</span></div>
+  <div>Benar: <span id="totalCorrect">0</span></div>
+  <div>Terakhir belajar: <span id="lastAccess">-</span></div>
+</div>
+
+<button onclick="resetProgress()"
+class="text-sm text-red-600 underline mb-4">
+Reset Progres
+</button>
+
+<div id="question" class="text-lg mb-4"></div>
+
+<input id="answer" type="text"
+class="border p-2 w-full mb-4 rounded"
+placeholder="Masukkan jawaban">
+
+<button onclick="checkAnswer()"
+class="bg-blue-600 text-white px-4 py-2 rounded">
+Cek Jawaban
+</button>
+
+<div id="feedback" class="mt-4 font-semibold"></div>
+
+</div>
+
+<script>
+let level = 0;
+let correctStreak = 0;
+let wrongStreak = 0;
+let currentAnswer = "";
+let totalAnswered = 0;
+let totalCorrect = 0;
+
+const questions = [
+
+/* ================= LEVEL 0 (15 SOAL) ================= */
+[
+  {q:"Tentukan nilai $x$ dari $x+3>7$", a:"x>4"},
+  {q:"Tentukan nilai $x$ dari $x-5\\le2$", a:"x<=7"},
+  {q:"Tentukan nilai $x$ dari $2x>6$", a:"x>3"},
+  {q:"Tentukan nilai $x$ dari $3x\\le12$", a:"x<=4"},
+  {q:"Tentukan nilai $x$ dari $x+4<10$", a:"x<6"},
+  {q:"Tentukan nilai $x$ dari $2x+1>7$", a:"x>3"},
+  {q:"Tentukan nilai $x$ dari $3x-4\\le5$", a:"x<=3"},
+  {q:"Tentukan nilai $x$ dari $5x+5<20$", a:"x<3"},
+  {q:"Tentukan nilai $x$ dari $4x-2\\ge6$", a:"x>=2"},
+  {q:"Tentukan nilai $x$ dari $6x+3\\le15$", a:"x<=2"},
+  {q:"Tentukan nilai $x$ dari $-2x>4$", a:"x<-2"},
+  {q:"Tentukan nilai $x$ dari $-3x\\le9$", a:"x>=-3"},
+  {q:"Tentukan nilai $x$ dari $-5x<-10$", a:"x>2"},
+  {q:"Tentukan nilai $x$ dari $-4x\\ge8$", a:"x<=-2"},
+  {q:"Tentukan nilai $x$ dari $-2x+1>5$", a:"x<-2"}
+],
+
+/* ================= LEVEL 1 (10 SOAL) ================= */
+[
+  {q:"Apakah fungsi $y=2^x$ NAIK atau TURUN?", a:"naik"},
+  {q:"Apakah fungsi $y=3^x$ NAIK atau TURUN?", a:"naik"},
+  {q:"Apakah fungsi $y=4^x$ NAIK atau TURUN?", a:"naik"},
+  {q:"Apakah fungsi $y=5^x$ NAIK atau TURUN?", a:"naik"},
+  {q:"Apakah fungsi $y=10^x$ NAIK atau TURUN?", a:"naik"},
+  {q:"Apakah fungsi $y=\\left(\\frac{1}{2}\\right)^x$ NAIK atau TURUN?", a:"turun"},
+  {q:"Apakah fungsi $y=\\left(\\frac{1}{3}\\right)^x$ NAIK atau TURUN?", a:"turun"},
+  {q:"Apakah fungsi $y=\\left(\\frac{1}{4}\\right)^x$ NAIK atau TURUN?", a:"turun"},
+  {q:"Apakah fungsi $y=\\left(\\frac{1}{5}\\right)^x$ NAIK atau TURUN?", a:"turun"},
+  {q:"Apakah fungsi $y=\\left(\\frac{1}{10}\\right)^x$ NAIK atau TURUN?", a:"turun"}
+],
+
+/* ================= LEVEL 2 (160 SOAL) ================= */
+[
+  {q:"Tentukan nilai $x$ dari $2^x>4$", a:"x>2"},
+  {q:"Tentukan nilai $x$ dari $2^x<4$", a:"x<2"},
+  {q:"Tentukan nilai $x$ dari $2^x\\le4$", a:"x<=2"},
+  {q:"Tentukan nilai $x$ dari $2^x\\ge4$", a:"x>=2"},
+  {q:"Tentukan nilai $x$ dari $2^x>8$", a:"x>3"},
+  {q:"Tentukan nilai $x$ dari $2^x<8$", a:"x<3"},
+  {q:"Tentukan nilai $x$ dari $2^x\\le8$", a:"x<=3"},
+  {q:"Tentukan nilai $x$ dari $2^x\\ge8$", a:"x>=3"},
+  {q:"Tentukan nilai $x$ dari $2^x>16$", a:"x>4"},
+  {q:"Tentukan nilai $x$ dari $2^x<16$", a:"x<4"},
+  {q:"Tentukan nilai $x$ dari $2^x\\le16$", a:"x<=4"},
+  {q:"Tentukan nilai $x$ dari $2^x\\ge16$", a:"x>=4"},
+  {q:"Tentukan nilai $x$ dari $2^x>32$", a:"x>5"},
+  {q:"Tentukan nilai $x$ dari $2^x<32$", a:"x<5"},
+  {q:"Tentukan nilai $x$ dari $2^x\\le32$", a:"x<=5"},
+  {q:"Tentukan nilai $x$ dari $2^x\\ge32$", a:"x>=5"},
+  {q:"Tentukan nilai $x$ dari $2^x>64$", a:"x>6"},
+  {q:"Tentukan nilai $x$ dari $2^x<64$", a:"x<6"},
+  {q:"Tentukan nilai $x$ dari $2^x\\le64$", a:"x<=6"},
+  {q:"Tentukan nilai $x$ dari $2^x\\ge64$", a:"x>=6"},
+  {q:"Tentukan nilai $x$ dari $2^x>128$", a:"x>7"},
+  {q:"Tentukan nilai $x$ dari $2^x<128$", a:"x<7"},
+  {q:"Tentukan nilai $x$ dari $2^x\\le128$", a:"x<=7"},
+  {q:"Tentukan nilai $x$ dari $2^x\\ge128$", a:"x>=7"},
+  {q:"Tentukan nilai $x$ dari $3^x>9$", a:"x>2"},
+  {q:"Tentukan nilai $x$ dari $3^x<9$", a:"x<2"},
+  {q:"Tentukan nilai $x$ dari $3^x\\le9$", a:"x<=2"},
+  {q:"Tentukan nilai $x$ dari $3^x\\ge9$", a:"x>=2"},
+  {q:"Tentukan nilai $x$ dari $3^x>27$", a:"x>3"},
+  {q:"Tentukan nilai $x$ dari $3^x<27$", a:"x<3"},
+  {q:"Tentukan nilai $x$ dari $3^x\\le27$", a:"x<=3"},
+  {q:"Tentukan nilai $x$ dari $3^x\\ge27$", a:"x>=3"},
+  {q:"Tentukan nilai $x$ dari $3^x>81$", a:"x>4"},
+  {q:"Tentukan nilai $x$ dari $3^x<81$", a:"x<4"},
+  {q:"Tentukan nilai $x$ dari $3^x\\le81$", a:"x<=4"},
+  {q:"Tentukan nilai $x$ dari $3^x\\ge81$", a:"x>=4"},
+  {q:"Tentukan nilai $x$ dari $3^x>243$", a:"x>5"},
+  {q:"Tentukan nilai $x$ dari $3^x<243$", a:"x<5"},
+  {q:"Tentukan nilai $x$ dari $3^x\\le243$", a:"x<=5"},
+  {q:"Tentukan nilai $x$ dari $3^x\\ge243$", a:"x>=5"},
+  {q:"Tentukan nilai $x$ dari $5^x>5$", a:"x>1"},
+  {q:"Tentukan nilai $x$ dari $5^x<5$", a:"x<1"},
+  {q:"Tentukan nilai $x$ dari $5^x\\le5$", a:"x<=1"},
+  {q:"Tentukan nilai $x$ dari $5^x\\ge5$", a:"x>=1"},
+  {q:"Tentukan nilai $x$ dari $5^x>25$", a:"x>2"},
+  {q:"Tentukan nilai $x$ dari $5^x<25$", a:"x<2"},
+  {q:"Tentukan nilai $x$ dari $5^x\\le25$", a:"x<=2"},
+  {q:"Tentukan nilai $x$ dari $5^x\\ge25$", a:"x>=2"},
+  {q:"Tentukan nilai $x$ dari $5^x>125$", a:"x>3"},
+  {q:"Tentukan nilai $x$ dari $5^x<125$", a:"x<3"},
+  {q:"Tentukan nilai $x$ dari $5^x\\le125$", a:"x<=3"},
+  {q:"Tentukan nilai $x$ dari $5^x\\ge125$", a:"x>=3"},
+  {q:"Tentukan nilai $x$ dari $7^x>7$", a:"x>1"},
+  {q:"Tentukan nilai $x$ dari $7^x<7$", a:"x<1"},
+  {q:"Tentukan nilai $x$ dari $7^x\\le7$", a:"x<=1"},
+  {q:"Tentukan nilai $x$ dari $7^x\\ge7$", a:"x>=1"},
+  {q:"Tentukan nilai $x$ dari $7^x>49$", a:"x>2"},
+  {q:"Tentukan nilai $x$ dari $7^x<49$", a:"x<2"},
+  {q:"Tentukan nilai $x$ dari $7^x\\le49$", a:"x<=2"},
+  {q:"Tentukan nilai $x$ dari $7^x\\ge49$", a:"x>=2"},
+  {q:"Tentukan nilai $x$ dari $4^x>4$", a:"x>1"},
+  {q:"Tentukan nilai $x$ dari $4^x<4$", a:"x<1"},
+  {q:"Tentukan nilai $x$ dari $4^x\\le4$", a:"x<=1"},
+  {q:"Tentukan nilai $x$ dari $4^x\\ge4$", a:"x>=1"},
+  {q:"Tentukan nilai $x$ dari $4^x>16$", a:"x>2"},
+  {q:"Tentukan nilai $x$ dari $4^x<16$", a:"x<2"},
+  {q:"Tentukan nilai $x$ dari $4^x\\le16$", a:"x<=2"},
+  {q:"Tentukan nilai $x$ dari $4^x\\ge16$", a:"x>=2"},   
+  {q:"Tentukan nilai $x$ dari $4^x>64$", a:"x>3"},
+  {q:"Tentukan nilai $x$ dari $4^x<64$", a:"x<3"},
+  {q:"Tentukan nilai $x$ dari $4^x\\le64$", a:"x<=3"},
+  {q:"Tentukan nilai $x$ dari $4^x\\ge64$", a:"x>=3"}, 
+  {q:"Tentukan nilai $x$ dari $10^x>100$", a:"x>2"},
+  {q:"Tentukan nilai $x$ dari $10^x<100$", a:"x<2"},
+  {q:"Tentukan nilai $x$ dari $10^x\\le100$", a:"x<=2"},
+  {q:"Tentukan nilai $x$ dari $10^x\\ge100$", a:"x>=2"},
+  {q:"Tentukan nilai $x$ dari $10^x>1000$", a:"x>3"},
+  {q:"Tentukan nilai $x$ dari $10^x<1000$", a:"x<3"},
+  {q:"Tentukan nilai $x$ dari $10^x\\le1000$", a:"x<=3"},
+  {q:"Tentukan nilai $x$ dari $10^x\\ge1000$", a:"x>=3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x>\\frac{1}{2}$", a:"x<1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x<\\frac{1}{2}$", a:"x>1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x\\le\\frac{1}{2}$", a:"x>=1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x\\ge\\frac{1}{2}$", a:"x<=1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^x>\\frac{1}{3}$", a:"x<1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^x<\\frac{1}{3}$", a:"x>1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^x\\le\\frac{1}{3}$", a:"x>=1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^x\\ge\\frac{1}{3}$", a:"x<=1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{4}\\right)^x>\\frac{1}{4}$", a:"x<1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{4}\\right)^x<\\frac{1}{4}$", a:"x>1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{4}\\right)^x\\le\\frac{1}{4}$", a:"x>=1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{4}\\right)^x\\ge\\frac{1}{4}$", a:"x<=1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{5}\\right)^x>\\frac{1}{5}$", a:"x<1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{5}\\right)^x<\\frac{1}{5}$", a:"x>1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{5}\\right)^x\\le\\frac{1}{5}$", a:"x>=1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{5}\\right)^x\\ge\\frac{1}{5}$", a:"x<=1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x>\\frac{1}{4}$", a:"x<2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x<\\frac{1}{4}$", a:"x>2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x\\le\\frac{1}{4}$", a:"x>=2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x\\ge\\frac{1}{4}$", a:"x<=2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^x>\\frac{1}{9}$", a:"x<2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^x<\\frac{1}{9}$", a:"x>2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^x\\le\\frac{1}{9}$", a:"x>=2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^x\\ge\\frac{1}{9}$", a:"x<=2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{4}\\right)^x>\\frac{1}{16}$", a:"x<2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{4}\\right)^x<\\frac{1}{16}$", a:"x>2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{4}\\right)^x\\le\\frac{1}{16}$", a:"x>=2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{4}\\right)^x\\ge\\frac{1}{16}$", a:"x<=2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{5}\\right)^x>\\frac{1}{25}$", a:"x<2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{5}\\right)^x<\\frac{1}{25}$", a:"x>2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{5}\\right)^x\\le\\frac{1}{25}$", a:"x>=2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{5}\\right)^x\\ge\\frac{1}{25}$", a:"x<=2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x>\\frac{1}{8}$", a:"x<3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x<\\frac{1}{8}$", a:"x>3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x\\le\\frac{1}{8}$", a:"x>=3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x\\ge\\frac{1}{8}$", a:"x<=3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^x>\\frac{1}{27}$", a:"x<3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^x<\\frac{1}{27}$", a:"x>3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^x\\le\\frac{1}{27}$", a:"x>=3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^x\\ge\\frac{1}{27}$", a:"x<=3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{4}\\right)^x>\\frac{1}{64}$", a:"x<3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{4}\\right)^x<\\frac{1}{64}$", a:"x>3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{4}\\right)^x\\le\\frac{1}{64}$", a:"x>=3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{4}\\right)^x\\ge\\frac{1}{64}$", a:"x<=3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{5}\\right)^x>\\frac{1}{125}$", a:"x<3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{5}\\right)^x<\\frac{1}{125}$", a:"x>3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{5}\\right)^x\\le\\frac{1}{125}$", a:"x>=3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{5}\\right)^x\\ge\\frac{1}{125}$", a:"x<=3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x>\\frac{1}{16}$", a:"x<4"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x<\\frac{1}{16}$", a:"x>4"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x\\le\\frac{1}{16}$", a:"x>=4"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x\\ge\\frac{1}{16}$", a:"x<=4"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^x>\\frac{1}{81}$", a:"x<4"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^x<\\frac{1}{81}$", a:"x>4"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^x\\le\\frac{1}{81}$", a:"x>=4"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^x\\ge\\frac{1}{81}$", a:"x<=4"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x>\\frac{1}{32}$", a:"x<5"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x<\\frac{1}{32}$", a:"x>5"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x\\le\\frac{1}{32}$", a:"x>=5"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x\\ge\\frac{1}{32}$", a:"x<=5"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^x>\\frac{1}{243}$", a:"x<5"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^x<\\frac{1}{243}$", a:"x>5"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^x\\le\\frac{1}{243}$", a:"x>=5"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^x\\ge\\frac{1}{243}$", a:"x<=5"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x>\\frac{1}{64}$", a:"x<6"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x<\\frac{1}{64}$", a:"x>6"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x\\le\\frac{1}{64}$", a:"x>=6"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x\\ge\\frac{1}{64}$", a:"x<=6"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x>\\frac{1}{128}$", a:"x<7"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x<\\frac{1}{128}$", a:"x>7"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x\\le\\frac{1}{128}$", a:"x>=7"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^x\\ge\\frac{1}{128}$", a:"x<=7"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{10}\\right)^x>\\frac{1}{100}$", a:"x<2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{10}\\right)^x<\\frac{1}{100}$", a:"x>2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{10}\\right)^x\\le\\frac{1}{100}$", a:"x>=2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{10}\\right)^x\\ge\\frac{1}{100}$", a:"x<=2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{10}\\right)^x>\\frac{1}{1000}$", a:"x<3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{10}\\right)^x<\\frac{1}{1000}$", a:"x>3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{10}\\right)^x\\le\\frac{1}{1000}$", a:"x>=3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{10}\\right)^x\\ge\\frac{1}{1000}$", a:"x<=3"}
+],
+
+/* ================= LEVEL 3 (80 SOAL) ================= */
+[
+  {q:"Tentukan nilai $x$ dari $2^{x+1}>64$", a:"x>5"},
+  {q:"Tentukan nilai $x$ dari $2^{x+1}<64$", a:"x<5"},
+  {q:"Tentukan nilai $x$ dari $2^{x+1}\\le64$", a:"x<=5"},
+  {q:"Tentukan nilai $x$ dari $2^{x+1}\\ge64$", a:"x>=5"},
+  {q:"Tentukan nilai $x$ dari $2^{x-2}>8$", a:"x>5"},
+  {q:"Tentukan nilai $x$ dari $2^{x-2}<8$", a:"x<5"},
+  {q:"Tentukan nilai $x$ dari $2^{x-2}\\le8$", a:"x<=5"},
+  {q:"Tentukan nilai $x$ dari $2^{x-2}\\ge8$", a:"x>=5"},
+  {q:"Tentukan nilai $x$ dari $3^{x+1}>81$", a:"x>3"},
+  {q:"Tentukan nilai $x$ dari $3^{x+1}<81$", a:"x<3"},
+  {q:"Tentukan nilai $x$ dari $3^{x+1}\\le81$", a:"x<=3"},
+  {q:"Tentukan nilai $x$ dari $3^{x+1}\\ge81$", a:"x>=3"},
+  {q:"Tentukan nilai $x$ dari $5^{x-1}>25$", a:"x>3"},
+  {q:"Tentukan nilai $x$ dari $5^{x-1}<25$", a:"x<3"},
+  {q:"Tentukan nilai $x$ dari $5^{x-1}\\le25$", a:"x<=3"},
+  {q:"Tentukan nilai $x$ dari $5^{x-1}\\ge25$", a:"x>=3"},
+  {q:"Tentukan nilai $x$ dari $10^{x+2}>1000$", a:"x>1"},
+  {q:"Tentukan nilai $x$ dari $10^{x+2}<1000$", a:"x<1"},
+  {q:"Tentukan nilai $x$ dari $10^{x+2}\\le1000$", a:"x<=1"},
+  {q:"Tentukan nilai $x$ dari $10^{x+2}\\ge1000$", a:"x>=1"},
+  {q:"Tentukan nilai $x$ dari $2^{2x}>32$", a:"x>5/2"},
+  {q:"Tentukan nilai $x$ dari $2^{2x}<32$", a:"x<5/2"},
+  {q:"Tentukan nilai $x$ dari $2^{2x}\\le32$", a:"x<=5/2"},
+  {q:"Tentukan nilai $x$ dari $2^{2x}\\ge32$", a:"x>=5/2"},
+  {q:"Tentukan nilai $x$ dari $3^{2x}>27$", a:"x>3/2"},
+  {q:"Tentukan nilai $x$ dari $3^{2x}<27$", a:"x<3/2"},
+  {q:"Tentukan nilai $x$ dari $3^{2x}\\le27$", a:"x<=3/2"},
+  {q:"Tentukan nilai $x$ dari $3^{2x}\\ge27$", a:"x>=3/2"},
+  {q:"Tentukan nilai $x$ dari $5^{2x}>125$", a:"x>3/2"},
+  {q:"Tentukan nilai $x$ dari $5^{2x}<125$", a:"x<3/2"},
+  {q:"Tentukan nilai $x$ dari $5^{2x}\\le125$", a:"x<=3/2"},
+  {q:"Tentukan nilai $x$ dari $5^{2x}\\ge125$", a:"x>=3/2"},
+  {q:"Tentukan nilai $x$ dari $2^{3x}>64$", a:"x>2"},
+  {q:"Tentukan nilai $x$ dari $2^{3x}<64$", a:"x<2"},
+  {q:"Tentukan nilai $x$ dari $2^{3x}\\le64$", a:"x<=2"},
+  {q:"Tentukan nilai $x$ dari $2^{3x}\\ge64$", a:"x>=2"},
+  {q:"Tentukan nilai $x$ dari $10^{2x}>100$", a:"x>1"},
+  {q:"Tentukan nilai $x$ dari $10^{2x}<100$", a:"x<1"},
+  {q:"Tentukan nilai $x$ dari $10^{2x}\\le100$", a:"x<=1"},
+  {q:"Tentukan nilai $x$ dari $10^{2x}\\ge100$", a:"x>=1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^{2x}>\\frac{1}{16}$", a:"x<2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^{2x}<\\frac{1}{16}$", a:"x>2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^{2x}\\le\\frac{1}{16}$", a:"x>=2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^{2x}\\ge\\frac{1}{16}$", a:"x<=2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^{x+1}>\\frac{1}{27}$", a:"x<2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^{x+1}<\\frac{1}{27}$", a:"x>2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^{x+1}\\le\\frac{1}{27}$", a:"x>=2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^{x+1}\\ge\\frac{1}{27}$", a:"x<=2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{4}\\right)^{2x}>\\frac{1}{16}$", a:"x<1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{4}\\right)^{2x}<\\frac{1}{16}$", a:"x>1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{4}\\right)^{2x}\\le\\frac{1}{16}$", a:"x>=1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{4}\\right)^{2x}\\ge\\frac{1}{{16}$", a:"x<=1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{5}\\right)^{x-1}>\\frac{1}{25}$", a:"x<3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{5}\\right)^{x-1}<\\frac{1}{25}$", a:"x>3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{5}\\right)^{x-1}\\le\\frac{1}{25}$", a:"x>=3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{5}\\right)^{x-1}\\ge\\frac{1}{25}$", a:"x<=3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^{3x}>\\frac{1}{8}$", a:"x<1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^{3x}<\\frac{1}{8}$", a:"x>1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^{3x}\\le\\frac{1}{8}$", a:"x>=1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^{3x}\\ge\\frac{1}{8}$", a:"x<=1"},
+  {q:"Tentukan nilai $x$ dari $2^{2x-1}>32$", a:"x>3"},
+  {q:"Tentukan nilai $x$ dari $2^{2x-1}<32$", a:"x<3"},
+  {q:"Tentukan nilai $x$ dari $2^{2x-1}\\le32$", a:"x<=3"},
+  {q:"Tentukan nilai $x$ dari $2^{2x-1}\\ge32$", a:"x>=3"},
+  {q:"Tentukan nilai $x$ dari $3^{2x+1}>27$", a:"x>1"},
+  {q:"Tentukan nilai $x$ dari $3^{2x+1}<27$", a:"x<1"},
+  {q:"Tentukan nilai $x$ dari $3^{2x+1}\\le27$", a:"x<=1"},
+  {q:"Tentukan nilai $x$ dari $3^{2x+1}\\ge27$", a:"x>=1"},
+  {q:"Tentukan nilai $x$ dari $5^{3x-3}>125$", a:"x>2"},
+  {q:"Tentukan nilai $x$ dari $5^{3x-3}<125$", a:"x<2"},
+  {q:"Tentukan nilai $x$ dari $5^{3x-3}\\le125$", a:"x<=2"},
+  {q:"Tentukan nilai $x$ dari $5^{3x-3}\\ge125$", a:"x>=2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^{2x-1}>\\frac{1}{32}$", a:"x<3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^{2x-1}<\\frac{1}{32}$", a:"x>3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^{2x-1}\\le\\frac{1}{32}$", a:"x>=3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^{2x-1}\\ge\\frac{1}{32}$", a:"x<=3"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^{2x+1}>\\frac{1}{243}$", a:"x<2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^{2x+1}<\\frac{1}{243}$", a:"x>2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^{2x+1}\\le\\frac{1}{243}$", a:"x>=2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^{2x+1}\\ge\\frac{1}{243}$", a:"x<=2"}
+],
+
+/* ================= LEVEL 4 (80 SOAL) ================= */
+[
+  {q:"Tentukan nilai $x$ dari $4^{x}>32$", a:"x>5/2"},
+  {q:"Tentukan nilai $x$ dari $4^{x}<32$", a:"x<5/2"},
+  {q:"Tentukan nilai $x$ dari $4^{x}\\le32$", a:"x<=5/2"},
+  {q:"Tentukan nilai $x$ dari $4^{x}\\ge32$", a:"x>=5/2"},
+  {q:"Tentukan nilai $x$ dari $9^{x}>27$", a:"x>3/2"},
+  {q:"Tentukan nilai $x$ dari $9^{x}<27$", a:"x<3/2"},
+  {q:"Tentukan nilai $x$ dari $9^{x}\\le27$", a:"x<=3/2"},
+  {q:"Tentukan nilai $x$ dari $9^{x}\\ge27$", a:"x>=3/2"},
+  {q:"Tentukan nilai $x$ dari $8^{x-1}>4$", a:"x>5/3"},
+  {q:"Tentukan nilai $x$ dari $8^{x-1}<4$", a:"x<5/3"},
+  {q:"Tentukan nilai $x$ dari $8^{x-1}\\le4$", a:"x<=5/3"},
+  {q:"Tentukan nilai $x$ dari $8^{x-1}\\ge4$", a:"x>=5/3"},
+  {q:"Tentukan nilai $x$ dari $16^{x}>8^2$", a:"x>3/2"},
+  {q:"Tentukan nilai $x$ dari $16^{x}<8^2$", a:"x<3/2"},
+  {q:"Tentukan nilai $x$ dari $16^{x}\\le8^2$", a:"x<=3/2"},
+  {q:"Tentukan nilai $x$ dari $16^{x}\\ge8^2$", a:"x>=3/2"},
+  {q:"Tentukan nilai $x$ dari $25^{x-1}>5$", a:"x>3/2"},
+  {q:"Tentukan nilai $x$ dari $25^{x-1}<5$", a:"x<3/2"},
+  {q:"Tentukan nilai $x$ dari $25^{x-1}\\le5$", a:"x<=3/2"},
+  {q:"Tentukan nilai $x$ dari $25^{x-1}\\ge5$", a:"x>=3/2"},
+  {q:"Tentukan nilai $x$ dari $2^{x+1}>4^x$", a:"x<1"},
+  {q:"Tentukan nilai $x$ dari $2^{x+1}<4^x$", a:"x>1"},
+  {q:"Tentukan nilai $x$ dari $2^{x+1}\\le4^x$", a:"x>=1"},
+  {q:"Tentukan nilai $x$ dari $2^{x+1}\\ge4^x$", a:"x<=1"},
+  {q:"Tentukan nilai $x$ dari $3^{3x}>9^{x+1}$", a:"x>2"},
+  {q:"Tentukan nilai $x$ dari $3^{3x}<9^{x+1}$", a:"x<2"},
+  {q:"Tentukan nilai $x$ dari $3^{3x}\\le9^{x+1}$", a:"x<=2"},
+  {q:"Tentukan nilai $x$ dari $3^{3x}\\ge9^{x+1}$", a:"x>=2"},
+  {q:"Tentukan nilai $x$ dari $4^{x-1}>2^{x}$", a:"x>2"},
+  {q:"Tentukan nilai $x$ dari $4^{x-1}<2^{x}$", a:"x<2"},
+  {q:"Tentukan nilai $x$ dari $4^{x-1}\\le2^{x}$", a:"x<=2"},
+  {q:"Tentukan nilai $x$ dari $4^{x-1}\\ge2^{x}$", a:"x>=2"},
+  {q:"Tentukan nilai $x$ dari $8^{x}>2^{2x+3}$", a:"x>3"},
+  {q:"Tentukan nilai $x$ dari $8^{x}<2^{2x+3}$", a:"x<3"},
+  {q:"Tentukan nilai $x$ dari $8^{x}\\le2^{2x+3}$", a:"x<=3"},
+  {q:"Tentukan nilai $x$ dari $8^{x}\\ge2^{2x+3}$", a:"x>=3"},
+  {q:"Tentukan nilai $x$ dari $9^{x+1}>3^{x+2}$", a:"x>0"},
+  {q:"Tentukan nilai $x$ dari $9^{x+1}<3^{x+2}$", a:"x<0"},
+  {q:"Tentukan nilai $x$ dari $9^{x+1}\\le3^{x+2}$", a:"x<=0"},
+  {q:"Tentukan nilai $x$ dari $9^{x+1}\\ge3^{x+2}$", a:"x>=0"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^{x}>\\left(\\frac{1}{4}\\right)^2$", a:"x<4"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^{x}<\\left(\\frac{1}{4}\\right)^2$", a:"x>4"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^{x}\\le\\left(\\frac{1}{4}\\right)^2$", a:"x>=4"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^{x}\\ge\\left(\\frac{1}{4}\\right)^2$", a:"x<=4"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{4}\\right)^{x+1}>\\frac{1}{16}$", a:"x<1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{4}\\right)^{x+1}<\\frac{1}{16}$", a:"x>1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{4}\\right)^{x+1}\\le\\frac{1}{16}$", a:"x>=1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{4}\\right)^{x+1}\\ge\\frac{1}{16}$", a:"x<=1"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^{3x}>\\left(\\frac{1}{9}\\right)^{x-1}$", a:"x<-2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^{3x}<\\left(\\frac{1}{9}\\right)^{x-1}$", a:"x>-2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^{3x}\\le\\left(\\frac{1}{9}\\right)^{x-1}$", a:"x<=-2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^{3x}\\ge\\left(\\frac{1}{9}\\right)^{x-1}$", a:"x>=-2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{5}\\right)^{x}>\\left(\\frac{1}{25}\\right)^{2}$", a:"x<4"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{5}\\right)^{x}<\\left(\\frac{1}{25}\\right)^{2}$", a:"x>4"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{5}\\right)^{x}\\le\\left(\\frac{1}{25}\\right)^{2}$", a:"x>=4"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{5}\\right)^{x}\\ge\\left(\\frac{1}{25}\\right)^{2}$", a:"x<=4"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^{x+2}>\\left(\\frac{1}{4}\\right)^{x}$", a:"x>2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^{x+2}<\\left(\\frac{1}{4}\\right)^{x}$", a:"x<2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^{x+2}\\le\\left(\\frac{1}{4}\\right)^{x}$", a:"x<=2"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{2}\\right)^{x+2}\\ge\\left(\\frac{1}{4}\\right)^{x}$", a:"x>=2"},
+  {q:"Tentukan nilai $x$ dari $2^{2x-1}>8^{x-2}$", a:"x<5"},
+  {q:"Tentukan nilai $x$ dari $2^{2x-1}<8^{x-2}$", a:"x>5"},
+  {q:"Tentukan nilai $x$ dari $2^{2x-1}\\le8^{x-2}$", a:"x>=5"},
+  {q:"Tentukan nilai $x$ dari $2^{2x-1}\\ge8^{x-2}$", a:"x<=5"},
+  {q:"Tentukan nilai $x$ dari $3^{x+1}>27^{x-1}$", a:"x<1"},
+  {q:"Tentukan nilai $x$ dari $3^{x+1}<27^{x-1}$", a:"x>1"},
+  {q:"Tentukan nilai $x$ dari $3^{x+1}\\le27^{x-1}$", a:"x>=1"},
+  {q:"Tentukan nilai $x$ dari $3^{x+1}\\ge27^{x-1}$", a:"x<=1"},
+  {q:"Tentukan nilai $x$ dari $4^{x}>2^{x+4}$", a:"x>4"},
+  {q:"Tentukan nilai $x$ dari $4^{x}<2^{x+4}$", a:"x<4"},
+  {q:"Tentukan nilai $x$ dari $4^{x}\\le2^{x+4}$", a:"x<=4"},
+  {q:"Tentukan nilai $x$ dari $4^{x}\\ge2^{x+4}$", a:"x>=4"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^{x-1}>\\left(\\frac{1}{27}\\right)^{2}$", a:"x<7"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^{x-1}<\\left(\\frac{1}{27}\\right)^{2}$", a:"x>7"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^{x-1}\\le\\left(\\frac{1}{27}\\right)^{2}$", a:"x>=7"},
+  {q:"Tentukan nilai $x$ dari $\\left(\\frac{1}{3}\\right)^{x-1}\\ge\\left(\\frac{1}{27}\\right)^{2}$", a:"x<=7"},
+  {q:"Tentukan nilai $x$ dari $9^{2x}>3^{x+5}$", a:"x>5/3"},
+  {q:"Tentukan nilai $x$ dari $9^{2x}<3^{x+5}$", a:"x<5/3"},
+  {q:"Tentukan nilai $x$ dari $9^{2x}\\le3^{x+5}$", a:"x<=5/3"},
+  {q:"Tentukan nilai $x$ dari $9^{2x}\\ge3^{x+5}$", a:"x>=5/3"}
+],
+];
+
+const STORAGE_KEY = "progress_pertidaksamaan_eksponen";
+
+function saveProgress(){
+  const data = {
+    level,
+    correctStreak,
+    wrongStreak,
+    totalAnswered,
+    totalCorrect,
+    lastAccess: new Date().toLocaleString("id-ID")
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function loadProgress(){
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if(saved){
+    const data = JSON.parse(saved);
+    level = data.level ?? 0;
+    correctStreak = data.correctStreak ?? 0;
+    wrongStreak = data.wrongStreak ?? 0;
+    totalAnswered = data.totalAnswered ?? 0;
+    totalCorrect = data.totalCorrect ?? 0;
+    document.getElementById("lastAccess").innerText = data.lastAccess ?? "-";
+  }
+}
+
+function resetProgress(){
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
+}
+
+function loadQuestion(){
+  const qset = questions[level];
+  const item = qset[Math.floor(Math.random()*qset.length)];
+  document.getElementById("question").innerHTML = item.q;
+  currentAnswer = item.a;
+  document.getElementById("answer").value = "";
+  MathJax.typeset();
+}
+
+function checkAnswer(){
+  const user = document.getElementById("answer").value.replace(/\s+/g,'');
+  const correct = currentAnswer.replace(/\s+/g,'');
+
+  totalAnswered++;
+
+  if(user === correct){
+    correctStreak++;
+    wrongStreak = 0;
+    totalCorrect++;
+    document.getElementById("feedback").innerText = "✅ Benar";
+
+    if(correctStreak>=5 && level<questions.length-1){
+      level++;
+      correctStreak=0;
+    }
+  }else{
+    wrongStreak++;
+    correctStreak=0;
+    document.getElementById("feedback").innerText = "❌ Salah";
+
+    if(wrongStreak>=3 && level>0){
+      level--;
+      wrongStreak=0;
+    }
+  }
+
+  document.getElementById("levelDisplay").innerText = level;
+  document.getElementById("totalAnswered").innerText = totalAnswered;
+  document.getElementById("totalCorrect").innerText = totalCorrect;
+
+  saveProgress();
+  loadQuestion();
+}
+
+loadProgress();
+document.getElementById("levelDisplay").innerText = level;
+document.getElementById("totalAnswered").innerText = totalAnswered;
+document.getElementById("totalCorrect").innerText = totalCorrect;
+loadQuestion();
+
+</script>
+</body>
+</html>
