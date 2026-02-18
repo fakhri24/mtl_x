@@ -238,7 +238,8 @@ const bankSoal = [
    CONFIGURASI APLIKASI
    ================================================================ */
 
-const maxPercobaan = 2;
+const maxPercobaan = 3;
+// let indexTersimpan = 0;
 
 /* ================================================================
    STATE
@@ -441,6 +442,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ],
   });
 });
+
 ui.loadSoal(state.indexSoal); // Muat soal pertama saat halaman dimuat
 
 // renderMathInElement(soalElement, {
