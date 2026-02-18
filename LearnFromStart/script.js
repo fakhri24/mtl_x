@@ -69,7 +69,7 @@ const bankSoal = [
   },
   {
     // No.6
-    soal: "Tentukan $x$ dari $2^{x^2+x}=\\sqrt{4^{x+3}}$",
+    soal: "Tentukan $x$ dari $2^{x^2+x}=\\sqrt{16^{x+3}}$",
     pilihanGanda: [
       { label: "A", text: "$\{-3,-2\}$" },
       { label: "B", text: "$\{-3,2\}$" },
@@ -91,7 +91,7 @@ const bankSoal = [
   },
   {
     // No.8
-    soal: "Tentukan $x$ dari $5^{x}-2^{x-1}=100$",
+    soal: "Tentukan $x$ dari $5^{x}-5^{x-1}=100$",
     pilihanGanda: [
       { label: "A", text: "$1$" },
       { label: "B", text: "$2$" },
@@ -126,23 +126,23 @@ const bankSoal = [
     // No.11
     soal: "Tentukan $x$ dari $3^{x+2}+3^{1-x}=12$",
     pilihanGanda: [
-      { label: "A", text: "$-2$" },
-      { label: "B", text: "$-1$" },
-      { label: "C", text: "$1$" },
-      { label: "D", text: "$2$" },
-    ],
-    jawaban: "D",
-  },
-  {
-    // No.12
-    soal: "Tentukan $x$ dari $\\sqrt[4]{16^{x+1}}=\\sqrt{2^{3x}}$",
-    pilihanGanda: [
       { label: "A", text: "$\{-1,0\}$" },
       { label: "B", text: "$\{-2,-1\}$" },
       { label: "C", text: "$\{1,2\}$" },
       { label: "D", text: "$\{0,1\}$" },
     ],
     jawaban: "A",
+  },
+  {
+    // No.12
+    soal: "Tentukan $x$ dari $\\sqrt[4]{16^{x+1}}=\\sqrt{2^{3x}}$",
+    pilihanGanda: [
+      { label: "A", text: "$-2$" },
+      { label: "B", text: "$-1$" },
+      { label: "C", text: "$1$" },
+      { label: "D", text: "$2$" },
+    ],
+    jawaban: "D",
   },
   {
     // No.13
@@ -159,10 +159,10 @@ const bankSoal = [
     // No.14
     soal: "Tentukan $x$ dari $\\left(\\frac{1}{10}\\right)^{x} \\le \\frac{1}{1000}$",
     pilihanGanda: [
-      { label: "A", text: "$x \\le -3$" },
-      { label: "B", text: "$x \\ge -3$" },
-      { label: "C", text: "$x > -3$" },
-      { label: "D", text: "$x < -3$" },
+      { label: "A", text: "$x \\le 3$" },
+      { label: "B", text: "$x \\ge 3$" },
+      { label: "C", text: "$x > 3$" },
+      { label: "D", text: "$x < 3$" },
     ],
     jawaban: "B",
   },
@@ -208,7 +208,7 @@ const bankSoal = [
       { label: "C", text: "$x \\ge \\frac{2}{3}$" },
       { label: "D", text: "$x \\le \\frac{1}{3}$" },
     ],
-    jawaban: "A",
+    jawaban: "C",
   },
   {
     // No.19
@@ -238,7 +238,7 @@ const bankSoal = [
    CONFIGURASI APLIKASI
    ================================================================ */
 
-const maxPercobaan = 4;
+const maxPercobaan = 2;
 
 /* ================================================================
    STATE
