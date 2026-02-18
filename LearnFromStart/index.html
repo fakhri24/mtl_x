@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Latihan Soal</title>
+
+    <link rel="stylesheet" href="style.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+    />
+
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"
+    ></script>
+
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    ></script>
+  </head>
+  <body>
+    <!-- <p class="level">Level 1</p> -->
+    <h4 class="status-bar" id="indexSoal">Soal ke-</h4>
+    <div class="soal-container">
+      <p id="soal">Ini deskripsi soal pertama.</p>
+    </div>
+
+    <input type="radio" name="pilihan" id="pilihan1" value="A" />
+    <label class="option" for="pilihan1">A. pilihan1</label><br />
+    <input type="radio" name="pilihan" id="pilihan2" value="B" />
+    <label class="option" for="pilihan2">B. pilihan2</label><br />
+    <input type="radio" name="pilihan" id="pilihan3" value="C" />
+    <label class="option" for="pilihan3">C. pilihan3</label><br />
+    <input type="radio" name="pilihan" id="pilihan4" value="D" />
+    <label class="option" for="pilihan4">D. pilihan4</label><br /><br />
+
+    <button id="tombolSubmit">Submit</button>
+
+    <p class="feedback"></p>
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,299 @@
+/* =====================
+   RESET & BASE
+===================== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
+  background-color: #f5f7fa;
+  color: #1f2933;
+  line-height: 1.6;
+}
+
+/* =====================
+   HEADER
+===================== */
+.top-bar {
+  background-color: #1e3a8a; /* biru gelap */
+  color: #ffffff;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-bar h1 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.top-bar .meta {
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+/* =====================
+   MAIN CONTAINER
+===================== */
+.container {
+  max-width: 760px;
+  margin: 24px auto;
+  padding: 0 16px;
+}
+
+/* =====================
+   QUESTION BOX
+===================== */
+.soal-container {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.question-text {
+  font-size: 1.4rem;
+  text-align: center;
+}
+
+/* =====================
+   OPTIONS
+===================== */
+.options {
+  margin-bottom: 20px;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: center;
+  justify-content: center;
+}
+
+/* .option:hover {
+  border-color: #2563eb;
+  background-color: #eff6ff;
+} */
+
+.option input[type="radio"] {
+  margin-right: 12px;
+  transform: scale(1.2);
+}
+
+.option span {
+  font-size: 1.05rem;
+}
+
+/* =====================
+   ACTION BUTTON
+===================== */
+.action {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+#tombolSubmit {
+  background-color: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 32px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+#tombolSubmit:hover {
+  background-color: #1d4ed8;
+}
+
+#tombolSubmit:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* =====================
+   FEEDBACK / HINT
+===================== */
+.feedback {
+  background-color: #fff7ed;
+  border-left: 4px solid #f59e0b;
+  border-radius: 6px;
+  padding: 16px;
+  margin-top: 12px;
+}
+
+.feedback-title {
+  margin: 0 0 8px 0;
+  font-weight: 600;
+  color: #92400e;
+}
+
+.hidden {
+  display: none;
+}
+
+/* =====================
+   FOOTER / STATUS
+===================== */
+.status-bar {
+  background-color: #ffffff;
+  border-top: 1px solid #e5e7eb;
+  padding: 12px 16px;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+/* =====================
+   GURU MODE BUTTON
+===================== */
+#guruToggle {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background-color: #1e3a8a;
+  color: #ffffff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+#guruToggle:hover {
+  background-color: #1e40af;
+}
+
+/* =====================
+   RESPONSIVE
+===================== */
+@media (max-width: 480px) {
+  .question-text {
+    font-size: 1.2rem;
+  }
+
+  .option span {
+    font-size: 1rem;
+  }
+}
+
+/* =====================
+   OPTION STATES
+===================== */
+
+/* Selected */
+.option.selected {
+  border-color: #2563eb;
+  background-color: #eff6ff;
+}
+
+/* Correct */
+.option.correct {
+  border-color: #16a34a;
+  background-color: #ecfdf5;
+}
+
+/* Wrong */
+.option.wrong {
+  border-color: #dc2626;
+  background-color: #fef2f2;
+}
+
+/* =====================
+   FEEDBACK STATES
+===================== */
+
+.feedback.correct {
+  background-color: #ecfdf5;
+  border-left-color: #16a34a;
+}
+
+.feedback.correct .feedback-title {
+  color: #166534;
+}
+
+.feedback.wrong {
+  background-color: #fff7ed;
+  border-left-color: #f59e0b;
+}
+
+.feedback.wrong .feedback-title {
+  color: #92400e;
+}
+
+/* =====================
+    SMOOTH TRANSITIONS
+===================== */
+.option,
+.feedback,
+#submitBtn {
+  transition: all 0.2s ease;
+}
+
+/* =====================
+   DISABLED OPTIONS
+===================== */
+.option.disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.option.disabled:hover {
+  background-color: #ffffff;
+  border-color: #e5e7eb;
+}
+
+/* =====================
+   PROGRESS BAR
+===================== */
+
+.progress-bar {
+  height: 6px;
+  background-color: #e5e7eb;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #2563eb;
+  transition: width 0.3s ease;
+}
+
+/* =====================
+   STATUS COLORS
+===================== */
+
+.status-red {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.status-yellow {
+  color: #ca8a04;
+  font-weight: 600;
+}
+
+.status-green {
+  color: #16a34a;
+  font-weight: 600;
+}
