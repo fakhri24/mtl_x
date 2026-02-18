@@ -238,7 +238,7 @@ const bankSoal = [
    CONFIGURASI APLIKASI
    ================================================================ */
 
-const maxPercobaan = 2;
+const maxPercobaan = 4;
 
 /* ================================================================
    STATE
