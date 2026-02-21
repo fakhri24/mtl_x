@@ -238,8 +238,7 @@ const bankSoal = [
    CONFIGURASI APLIKASI
    ================================================================ */
 
-const maxPercobaan = 3;
-// let indexTersimpan = 0;
+const maxPercobaan = 2;
 
 /* ================================================================
    STATE
@@ -251,6 +250,13 @@ const state = {
   faseSoal: "menjawab", // "menjawab" atau "selesai"
   jumlahPercobaan: 0,
   kunciJawaban: undefined,
+
+  totalSoal: bankSoal.length,
+  benar: 0,
+  salah: 0,
+  riwayatJawaban: [], // {index, benar: true/false}
+
+  mode: "latihan", // "latihan" atau "review"
 };
 
 /* ================================================================
@@ -289,8 +295,6 @@ const ui = {
     indexSoalElement.textContent = `Soal ${index + 1} dari ${bankSoal.length}`;
     soalElement.innerHTML = bankSoal[index].soal;
 
-    // console.log(bankSoal[index].soal);
-
     for (let i = 0; i < pilihan.length; i++) {
       pilihan[i].value = bankSoal[index].pilihanGanda[i].label; // Set value sesuai dengan huruf pilihan (A, B, C, D)
 
@@ -298,28 +302,19 @@ const ui = {
       const labelElement = document.querySelector(
         `label[for="${pilihan[i].id}"]`,
       );
+
       labelElement.innerHTML = bankSoal[index].pilihanGanda[i].text;
     }
 
     state.kunciJawaban = bankSoal[index].jawaban; // Update kunci jawaban sesuai dengan soal yang dimuat
 
-    renderMathInElement(soalElement, {
-      delimiters: [
-        { left: "$$", right: "$$", display: true },
-        { left: "$", right: "$", display: false },
-      ],
-    });
+    ui.renderMath(soalElement);
 
     for (let i = 0; i < pilihan.length; i++) {
       const labelElement = document.querySelector(
         `label[for="${pilihan[i].id}"]`,
       );
-      renderMathInElement(labelElement, {
-        delimiters: [
-          { left: "$$", right: "$$", display: true },
-          { left: "$", right: "$", display: false },
-        ],
-      });
+      ui.renderMath(labelElement);
     }
   },
 
@@ -343,6 +338,82 @@ const ui = {
       pilihan[i].disabled = true;
     }
   },
+
+  renderMath(el) {
+    KaTeXLoader.render(el);
+  },
+
+  renderRingkasan() {
+    document.getElementById("totalSoal").textContent = state.totalSoal;
+    document.getElementById("jumlahBenar").textContent = state.benar;
+    document.getElementById("jumlahSalah").textContent = state.salah;
+    document.getElementById("skorAkhir").textContent = hitungSkor();
+    document.getElementById("hasilAkhir").hidden = false; // Tampilkan div hasil akhir
+  },
+
+  tandaiReview() {
+    const jawabanBenar = bankSoal[state.indexSoal].jawaban;
+
+    let jawabanUser = undefined;
+    for (let i = 0; i < state.riwayatJawaban.length; i++) {
+      if (state.riwayatJawaban[i].index === state.indexSoal) {
+        jawabanUser = state.riwayatJawaban[i].jawaban;
+        break;
+      }
+    }
+
+    for (let i = 0; i < pilihan.length; i++) {
+      const labelElement = document.querySelector(
+        `label[for="${pilihan[i].id}"]`,
+      );
+
+      labelElement.classList.remove("benar", "salah", "dipilih"); // Hapus kelas sebelumnya
+
+      if (pilihan[i].value === jawabanBenar) {
+        labelElement.classList.add("benar"); // Tambahkan kelas untuk jawaban benar
+        labelElement.innerHTML += "<strong>✅</strong>"; // Tambahkan teks penanda jawaban benar
+      }
+
+      if (pilihan[i].value === jawabanUser) {
+        labelElement.classList.add("dipilih"); // Tambahkan kelas untuk jawaban yang dipilih user
+        if (jawabanUser !== jawabanBenar) {
+          labelElement.classList.add("salah"); // Tambahkan kelas untuk jawaban salah
+          labelElement.innerHTML += "<strong>❌</strong>"; // Tambahkan teks penanda jawaban salah
+        }
+      }
+    }
+  },
+
+  renderReviewList() {
+    const listElement = document.getElementById("reviewList");
+    listElement.innerHTML = ""; // Clear list sebelum diisi ulang
+
+    state.riwayatJawaban
+      .filter((item) => !item.benar)
+      .forEach((item) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = `Soal ke-${item.index + 1}`;
+        listItem.style.cursor = "pointer";
+        listItem.addEventListener("click", function () {
+          controller.renderReview(item.index);
+        });
+        listElement.appendChild(listItem);
+      });
+
+    document.getElementById("reviewSection").hidden = false; // Tampilkan container list review
+  },
+
+  updateReviewNavigation() {
+    document.getElementById("reviewNavigation").hidden = false; // Tampilkan container navigasi review
+
+    const prevButton = document.getElementById("prevReviewButton");
+    const nextButton = document.getElementById("nextReviewButton");
+
+    if (!prevButton || !nextButton) return;
+
+    prevButton.disabled = state.indexSoal === 0;
+    nextButton.disabled = state.indexSoal === bankSoal.length - 1;
+  },
 };
 
 /* ================================================================
@@ -351,14 +422,17 @@ const ui = {
 
 const controller = {
   onRadioSelect(value) {
+    if (state.mode === "review") return; // Tidak menyimpan jawaban jika sedang dalam mode review
     if (state.faseSoal !== "menjawab") return; // Hanya simpan jawaban jika fase soal adalah "menjawab"
 
     state.jawabanDipilih = value;
-    // console.log(state.jawabanDipilih);
   },
 
   onSubmit() {
+    if (state.mode === "review") return; // Tidak melakukan submit jika sedang dalam mode review
+
     if (state.faseSoal !== "menjawab") return;
+
     if (!state.jawabanDipilih) return; // Jika belum memilih jawaban, jangan lakukan apa-apa
 
     const hasil = engine.submitJawaban(
@@ -367,12 +441,20 @@ const controller = {
       state.kunciJawaban,
       maxPercobaan,
     );
+
     ui.renderFeedback(hasil.pesan);
 
     switch (hasil.tipe) {
       case "BENAR":
         state.jumlahPercobaan = 0; // Reset jumlah percobaan jika jawaban benar
         state.faseSoal = "selesai";
+        state.benar++;
+        state.riwayatJawaban.push({
+          index: state.indexSoal,
+          jawaban: state.jawabanDipilih,
+          benar: true,
+        });
+
         controller.lanjutSoal();
         break;
 
@@ -383,6 +465,13 @@ const controller = {
       case "SALAH_LANJUT":
         state.jumlahPercobaan = 0; // Reset jumlah percobaan setelah mencapai batas
         state.faseSoal = "selesai";
+        state.salah++;
+        state.riwayatJawaban.push({
+          index: state.indexSoal,
+          jawaban: state.jawabanDipilih,
+          benar: false,
+        });
+
         controller.lanjutSoal();
         break;
     }
@@ -395,8 +484,10 @@ const controller = {
       ui.loadSoal(state.indexSoal); // Muat soal berikutnya jika masih ada
       controller.resetUntukSoalBaru();
     } else {
-      ui.renderFeedback("Selamat! Kamu sudah menyelesaikan semua soal.");
+      ui.renderFeedback("Latihan selesai 🎉");
       ui.disableInput();
+      ui.renderRingkasan(); // Tampilkan ringkasan hasil akhir
+      ui.renderReviewList(); // Tampilkan daftar soal yang bisa direview
     }
   },
 
@@ -407,7 +498,87 @@ const controller = {
     ui.resetInput(); // Reset input pilihan ganda
     ui.clearFeedback(); // Clear feedback saat memulai soal baru
   },
+
+  renderReview(index) {
+    state.mode = "review";
+    state.indexSoal = index;
+    state.faseSoal = "selesai"; // Set fase soal ke "selesai" agar tidak bisa submit jawaban
+    state.jawabanDipilih = undefined; // Reset jawaban yang dipilih
+
+    ui.loadSoal(index); // Muat soal yang ingin direview
+    ui.clearFeedback(); // Clear feedback saat memulai review
+    ui.resetInput(); // Reset input pilihan ganda
+    ui.disableInput(); // Nonaktifkan input agar tidak bisa submit jawaban saat review
+    ui.tandaiReview(); // Tampilkan tanda jawaban benar/salah saat review
+    ui.updateReviewNavigation(); // Update tombol navigasi review (jika ada)
+  },
+
+  prevReview() {
+    if (state.mode !== "review") return;
+    if (state.indexSoal <= 0) return;
+
+    state.indexSoal--;
+    controller.renderReview(state.indexSoal);
+  },
+
+  nextReview() {
+    if (state.mode !== "review") return;
+    if (state.indexSoal >= bankSoal.length - 1) return;
+
+    state.indexSoal++;
+    controller.renderReview(state.indexSoal);
+  },
 };
+
+/* ================================================================
+   HELPER FUNCTIONS
+   ================================================================ */
+
+function hitungSkor() {
+  return Math.round((state.benar / state.totalSoal) * 100);
+}
+
+const KaTeXLoader = (function () {
+  let siap = false;
+  let antrian = [];
+
+  function cekSiap() {
+    if (typeof renderMathInElement === "function") {
+      siap = true;
+
+      // jalankan semua render yang tertunda
+      for (let i = 0; i < antrian.length; i++) {
+        jalankanRender(antrian[i]);
+      }
+      antrian = [];
+    }
+  }
+
+  function jalankanRender(el) {
+    renderMathInElement(el, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$", right: "$", display: false },
+      ],
+    });
+  }
+
+  // polling ringan, aman untuk static site
+  const interval = setInterval(() => {
+    cekSiap();
+    if (siap) clearInterval(interval);
+  }, 50);
+
+  return {
+    render(el) {
+      if (siap) {
+        jalankanRender(el);
+      } else {
+        antrian.push(el);
+      }
+    },
+  };
+})();
 
 /* ================================================================
    EVENT BINDING
@@ -416,11 +587,13 @@ const controller = {
 const indexSoalElement = document.getElementById("indexSoal");
 const soalElement = document.getElementById("soal");
 const tombolSubmitElement = document.getElementById("tombolSubmit");
-const feedbackElement = document.querySelector(".feedback");
+const feedbackElement = document.getElementById("feedback");
+const tombolPrevReview = document.getElementById("prevReviewButton");
+const tombolNextReview = document.getElementById("nextReviewButton");
 let pilihan = document.getElementsByName("pilihan");
 
 for (let i = 0; i < pilihan.length; i++) {
-  pilihan[i].addEventListener("click", function () {
+  pilihan[i].addEventListener("change", function () {
     // Simpan jawaban yang dipilih saat pengguna mengklik pilihan
     controller.onRadioSelect(pilihan[i].value);
   });
@@ -430,154 +603,16 @@ tombolSubmitElement.addEventListener("click", function () {
   controller.onSubmit();
 });
 
+tombolPrevReview.addEventListener("click", function () {
+  controller.prevReview();
+});
+
+tombolNextReview.addEventListener("click", function () {
+  controller.nextReview();
+});
+
 /* ================================================================
    INISIALISASI APLIKASI
    ================================================================ */
 
-document.addEventListener("DOMContentLoaded", function () {
-  renderMathInElement(document.body, {
-    delimiters: [
-      { left: "$$", right: "$$", display: true },
-      { left: "$", right: "$", display: false },
-    ],
-  });
-});
-
 ui.loadSoal(state.indexSoal); // Muat soal pertama saat halaman dimuat
-
-// renderMathInElement(soalElement, {
-//   delimiters: [
-//     { left: "$$", right: "$$", display: true },
-//     { left: "$", right: "$", display: false },
-//   ],
-// });
-
-// for (let i = 0; i < pilihan.length; i++) {
-//   const labelElement = document.querySelector(`label[for="${pilihan[i].id}"]`);
-//   renderMathInElement(labelElement, {
-//     delimiters: [
-//       { left: "$$", right: "$$", display: true },
-//       { left: "$", right: "$", display: false },
-//     ],
-//   });
-// }
-
-/* ================================================================
-   FUNGSI HELPER
-     - simpanJawaban: Menyimpan jawaban yang dipilih oleh pengguna
-     - tampilkanFeedback: Menampilkan pesan feedback kepada pengguna
-     - handleJawabanBenar: Logika untuk menangani jawaban benar
-     - handleJawabanSalah: Logika untuk menangani jawaban salah
-     - cekJawaban: Memeriksa apakah jawaban yang dipilih benar atau salah
-   ================================================================ */
-
-/*
-const init = function () {
-  // Inisialisasi variabel global jika diperlukan
-  state.jawabanDipilih = undefined;
-  state.jumlahPercobaan = 0;
-  state.faseSoal = "menjawab";
-  tampilkanFeedback(""); // Reset feedback saat memulai soal baru
-};
-
-const uncheckPilihan = function () {
-  for (let i = 0; i < pilihan.length; i++) {
-    pilihan[i].checked = false;
-  }
-};
-
-const loadSoal = function () {
-  const soalElement = document.getElementById("soal");
-  soalElement.textContent = bankSoal[state.indexSoal].soal;
-
-  console.log(bankSoal[state.indexSoal].soal);
-
-  for (let i = 0; i < pilihan.length; i++) {
-    pilihan[i].value = bankSoal[state.indexSoal].pilihanGanda[i].label; // Set value sesuai dengan huruf pilihan (A, B, C, D)
-
-    // Update label teks untuk setiap pilihan
-    const labelElement = document.querySelector(
-      `label[for="${pilihan[i].id}"]`,
-    );
-    labelElement.textContent = bankSoal[state.indexSoal].pilihanGanda[i].text;
-  }
-
-  state.kunciJawaban = bankSoal[state.indexSoal].jawaban; // Update kunci jawaban sesuai dengan soal yang dimuat
-  init(); // Reset variabel global untuk soal baru
-
-  // Uncheck semua pilihan saat memuat soal baru
-  state.resetInput();
-};
-
-const simpanJawaban = function (pilihan) {
-  if (state.faseSoal !== "menjawab") return; // Hanya simpan jawaban jika fase soal adalah "menjawab"
-
-  state.jawabanDipilih = pilihan.value;
-  console.log(state.jawabanDipilih);
-};
-
-const tampilkanFeedback = function (pesan) {
-  feedbackElement.textContent = pesan;
-};
-
-const handleJawabanBenar = function () {
-  state.jumlahPercobaan = 0; // Reset jumlah percobaan jika jawaban benar
-  state.faseSoal = "selesai";
-  state.jawabanDipilih = undefined; // Reset jawaban yang dipilih
-
-  tampilkanFeedback("Jawaban benar! Lanjut ke soal berikutnya.");
-};
-
-const handleJawabanSalah = function () {
-  state.jumlahPercobaan++;
-
-  if (state.jumlahPercobaan < maxPercobaan) {
-    tampilkanFeedback("Jawaban salah! Coba lagi.");
-    // console.log("Jawaban salah! Coba lagi.");
-  } else if (state.jumlahPercobaan === maxPercobaan) {
-    state.jumlahPercobaan = 0; // Reset jumlah percobaan setelah mencapai batas
-    state.faseSoal = "selesai";
-    state.jawabanDipilih = undefined; // Reset jawaban yang dipilih
-    tampilkanFeedback("Jawaban salah! Lanjut ke soal berikutnya.");
-    // console.log("Jawaban salah! Lanjut ke soal berikutnya.");
-  }
-};
-
-const cekJawaban = function () {
-  if (state.faseSoal !== "menjawab") return;
-
-  if (state.jawabanDipilih) {
-    if (state.jawabanDipilih === state.kunciJawaban) {
-      handleJawabanBenar();
-    } else {
-      handleJawabanSalah();
-    }
-  }
-};
-
-loadSoal(); // Muat soal pertama saat halaman dimuat
-
-for (let i = 0; i < pilihan.length; i++) {
-  pilihan[i].addEventListener("click", function () {
-    // Simpan jawaban yang dipilih saat pengguna mengklik pilihan
-    simpanJawaban(pilihan[i]);
-  });
-}
-
-tombolSubmitElement.addEventListener("click", function () {
-  // Cek jawaban saat tombol submit diklik
-  cekJawaban();
-
-  if (state.faseSoal === "selesai") {
-    state.indexSoal++;
-
-    if (state.indexSoal < bankSoal.length) {
-      loadSoal(); // Muat soal berikutnya jika masih ada
-    } else {
-      tampilkanFeedback("Selamat! Anda telah menyelesaikan semua soal.");
-      // disable tombol submit jika semua soal sudah selesai
-      state.disableInput();
-    }
-  }
-});
-*/

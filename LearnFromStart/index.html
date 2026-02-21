@@ -21,24 +21,44 @@
     ></script>
   </head>
   <body>
+    <button id="resetButton" hidden>Reset Progress</button>
     <!-- <p class="level">Level 1</p> -->
-    <h4 class="status-bar" id="indexSoal">Soal ke-</h4>
-    <div class="soal-container">
+    <h4 id="indexSoal">Soal ke-</h4>
+    <div>
       <p id="soal">Ini deskripsi soal pertama.</p>
     </div>
 
     <input type="radio" name="pilihan" id="pilihan1" value="A" />
-    <label class="option" for="pilihan1">A. pilihan1</label><br />
+    <label for="pilihan1">A. pilihan1</label><br />
     <input type="radio" name="pilihan" id="pilihan2" value="B" />
-    <label class="option" for="pilihan2">B. pilihan2</label><br />
+    <label for="pilihan2">B. pilihan2</label><br />
     <input type="radio" name="pilihan" id="pilihan3" value="C" />
-    <label class="option" for="pilihan3">C. pilihan3</label><br />
+    <label for="pilihan3">C. pilihan3</label><br />
     <input type="radio" name="pilihan" id="pilihan4" value="D" />
-    <label class="option" for="pilihan4">D. pilihan4</label><br /><br />
+    <label for="pilihan4">D. pilihan4</label><br /><br />
 
     <button id="tombolSubmit">Submit</button>
 
-    <p class="feedback"></p>
+    <p id="feedback"></p>
+
+    <div id="hasilAkhir" hidden>
+      <h3>Hasil Akhir</h3>
+      <p>Total soal: <span id="totalSoal"></span></p>
+      <p>Benar: <span id="jumlahBenar"></span></p>
+      <p>Salah: <span id="jumlahSalah"></span></p>
+      <p>Skor: <span id="skorAkhir"></span>%</p>
+    </div>
+
+    <div id="reviewNavigation" hidden>
+      <button id="prevReviewButton">Sebelumnya</button>
+      <button id="nextReviewButton">Selanjutnya</button>
+    </div>
+
+    <div id="reviewSection" hidden>
+      <h4>Soal yang perlu diulang:</h4>
+      <ul id="reviewList"></ul>
+    </div>
+
     <script src="script.js"></script>
   </body>
 </html>
