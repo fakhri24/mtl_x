@@ -192,9 +192,10 @@
           answer: 2, // C
         },
         {
-          question: "Nilai dari $^3\\log 81 = x$. Maka nilai $x$ adalah...",
-          options: ["A. 2", "B. 3", "C. 4", "D. 5", "E. 9"],
-          answer: 2, // C
+          question:
+            "Ingat sifat $^a\\log 1 = 0$. Nilai $x$ yang memenuhi persamaan $^3\\log(2x - 5) = 0$ adalah...",
+          options: ["A. 2", "B. 3", "C. 4", "D. 5", "E. 6"],
+          answer: 1, // B
         },
         {
           question:
@@ -323,11 +324,13 @@
             answers[`q${index}`] = selected.value;
           }
         });
-        localStorage.setItem("logQuizFinalProgress", JSON.stringify(answers));
+        localStorage.setItem("logQuizFinalProgressV2", JSON.stringify(answers));
       }
 
       function loadProgress() {
-        const saved = JSON.parse(localStorage.getItem("logQuizFinalProgress"));
+        const saved = JSON.parse(
+          localStorage.getItem("logQuizFinalProgressV2"),
+        );
         if (saved) {
           for (const key in saved) {
             const qIndex = parseInt(key.replace("q", ""));
@@ -375,7 +378,7 @@
 
       function resetQuiz() {
         if (confirm("Hapus semua jawaban dan mulai dari awal?")) {
-          localStorage.removeItem("logQuizFinalProgress");
+          localStorage.removeItem("logQuizFinalProgressV2");
           location.reload();
         }
       }
