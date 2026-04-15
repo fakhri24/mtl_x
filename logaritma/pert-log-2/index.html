@@ -330,7 +330,7 @@
             a: "2<x<4",
           },
           {
-            q: "(\\log{x})^2 - \\log{x} +2 \\leq 0",
+            q: "(\\log{x})^2 - \\log{x} - 2 \\leq 0",
             options: [
               "0.1\\leq x \\leq 100",
               "-1\\leq x \\leq 2",
@@ -366,7 +366,7 @@
 
       // Load data dari LocalStorage saat halaman dibuka
       function loadProgress() {
-        const savedData = localStorage.getItem("logQuizData");
+        const savedData = localStorage.getItem("pertidaksamaanLogData");
         if (savedData) {
           const data = JSON.parse(savedData);
           currentLevel = data.currentLevel || 0;
@@ -390,7 +390,7 @@
           totalWrong,
           usedQuestions,
         };
-        localStorage.setItem("logQuizData", JSON.stringify(data));
+        localStorage.setItem("pertidaksamaanLogData", JSON.stringify(data));
       }
 
       // Reset progres manual
@@ -398,7 +398,7 @@
         if (
           confirm("Apakah Anda yakin ingin mereset semua progres kembali ke 0?")
         ) {
-          localStorage.removeItem("logQuizData");
+          localStorage.removeItem("pertidaksamaanLogData");
           location.reload(); // Muat ulang halaman
         }
       }
