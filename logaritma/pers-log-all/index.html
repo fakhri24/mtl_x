@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Latihan Persamaan Logaritma</title>
+
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [
+            ["\\(", "\\)"],
+            ["$", "$"],
+          ],
+        },
+      };
+    </script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <style>
+      :root {
+        --primary: #2563eb;
+        --primary-hover: #1d4ed8;
+        --hint-bg: #fef9c3;
+        --hint-border: #eab308;
+        --sol-bg: #f0fdf4;
+        --sol-border: #22c55e;
+        --text: #1f2937;
+        --bg: #f3f4f6;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+        margin: 0;
+        padding: 20px;
+      }
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      }
+      h1,
+      h2 {
+        text-align: center;
+        color: var(--primary);
+      }
+      .question-card {
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        transition: box-shadow 0.2s;
+      }
+      .question-card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+      .question-text {
+        font-size: 1.15rem;
+        font-weight: 500;
+        margin-bottom: 15px;
+      }
+      .btn-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+      button {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 600;
+        transition:
+          background-color 0.2s,
+          opacity 0.2s;
+      }
+      button:active {
+        transform: scale(0.98);
+      }
+      .btn-hint {
+        background-color: #f59e0b;
+        color: white;
+      }
+      .btn-hint:hover {
+        background-color: #d97706;
+      }
+
+      .btn-sol {
+        background-color: var(--primary);
+        color: white;
+      }
+      .btn-sol:hover {
+        background-color: var(--primary-hover);
+      }
+
+      .hidden {
+        display: none;
+      }
+      .reveal-box {
+        padding: 15px;
+        border-left: 4px solid;
+        border-radius: 4px;
+        margin-top: 10px;
+        animation: fadeIn 0.3s ease-in-out;
+      }
+      .hint-content {
+        background-color: var(--hint-bg);
+        border-color: var(--hint-border);
+      }
+      .sol-content {
+        background-color: var(--sol-bg);
+        border-color: var(--sol-border);
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-5px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Latihan Persamaan Logaritma</h1>
+      <h2>Tentukan nilai x yang memenuhi persamaan berikut!</h2>
+
+      <div id="quiz-container"></div>
+    </div>
+
+    <script>
+      // Data soal disimpan dalam array JSON agar mudah dikelola dan dimodifikasi
+      const soalData = [
+        {
+          no: 1,
+          soal: "\\log(2x-10) = \\log(x-7)",
+          hint: "Karena basis logaritmanya sama (10), samakan bagian numerusnya. Bagian paling krusial: cek kembali nilai \\(x\\) yang didapat ke syarat numerus logaritma (numerus \\(> 0\\)).",
+          pembahasan:
+            "Syarat numerus:<br>1) \\(2x-10 > 0 \\Rightarrow x > 5\\)<br>2) \\(x-7 > 0 \\Rightarrow x > 7\\)<br>Syarat irisan: \\(x > 7\\).<br><br>Penyelesaian:<br>\\(2x - 10 = x - 7\\)<br>\\(x = 3\\)<br><br>Karena \\(x = 3\\) tidak memenuhi syarat numerus (\\(3 < 7\\)), maka tidak ada nilai \\(x\\) yang memenuhi.<br><strong>HP = \\(\\emptyset\\)</strong>",
+        },
+        {
+          no: 2,
+          soal: "\\log_{27}(x+2) = \\log_{27}(3x)",
+          hint: "Basis sudah sama (27). Langsung samakan persamaan numerusnya: \\(x+2 = 3x\\).",
+          pembahasan:
+            "Syarat numerus:<br>\\(x+2 > 0 \\Rightarrow x > -2\\)<br>\\(3x > 0 \\Rightarrow x > 0\\)<br>Irisan: \\(x > 0\\).<br><br>Penyelesaian:<br>\\(x + 2 = 3x\\)<br>\\(2x = 2 \\Rightarrow x = 1\\).<br>Karena \\(1 > 0\\), maka memenuhi syarat.<br><strong>HP = {1}</strong>",
+        },
+        {
+          no: 3,
+          soal: "\\log_{2}(3x+7) = 0",
+          hint: "Gunakan definisi logaritma: \\(\\log_a b = c \\Leftrightarrow b = a^c\\). Ingat bahwa setiap bilangan tak nol pangkat 0 hasilnya 1.",
+          pembahasan:
+            "Penyelesaian:<br>\\(3x + 7 = 2^0\\)<br>\\(3x + 7 = 1\\)<br>\\(3x = -6 \\Rightarrow x = -2\\)<br><br>Cek syarat numerus:<br>\\(3(-2) + 7 = 1 > 0\\) (Memenuhi).<br><strong>HP = {-2}</strong>",
+        },
+        {
+          no: 4,
+          soal: "\\log(x-11) = 1",
+          hint: "Jika basis logaritma tidak ditulis, itu artinya basisnya adalah 10. Ubah ke bentuk eksponen.",
+          pembahasan:
+            "Penyelesaian:<br>\\(x - 11 = 10^1\\)<br>\\(x - 11 = 10\\)<br>\\(x = 21\\)<br><br>Cek syarat numerus:<br>\\(21 - 11 = 10 > 0\\) (Memenuhi).<br><strong>HP = {21}</strong>",
+        },
+        {
+          no: 5,
+          soal: "\\log_{5}(x+2) - \\log_{5}(x^{2}) = 0",
+          hint: "Gunakan sifat pengurangan logaritma: \\(\\log_a b - \\log_a c = \\log_a(\\frac{b}{c})\\). Atau, pindahkan salah satu logaritma ke ruas kanan sehingga menjadi \\(\\log_a b = \\log_a c\\).",
+          pembahasan:
+            "Pindahkan ke ruas kanan:<br>\\(\\log_{5}(x+2) = \\log_{5}(x^{2})\\)<br><br>Samakan numerus:<br>\\(x + 2 = x^2\\)<br>\\(x^2 - x - 2 = 0\\)<br>\\((x - 2)(x + 1) = 0\\)<br>\\(x = 2\\) atau \\(x = -1\\).<br><br>Cek syarat numerus (\\(x+2>0\\) dan \\(x^2>0\\)):<br>- Untuk \\(x=2\\): \\(2+2=4>0\\) dan \\(2^2=4>0\\) (Memenuhi)<br>- Untuk \\(x=-1\\): \\(-1+2=1>0\\) dan \\((-1)^2=1>0\\) (Memenuhi)<br><strong>HP = {-1, 2}</strong>",
+        },
+        {
+          no: 6,
+          soal: "\\log_{3}(5x+1) = 4",
+          hint: "Sama seperti soal no.3, ubah bentuk logaritma menjadi bentuk eksponensial: \\(5x+1 = 3^4\\).",
+          pembahasan:
+            "Penyelesaian:<br>\\(5x + 1 = 3^4\\)<br>\\(5x + 1 = 81\\)<br>\\(5x = 80 \\Rightarrow x = 16\\)<br><br>Cek numerus:<br>\\(5(16)+1 = 81 > 0\\) (Memenuhi).<br><strong>HP = {16}</strong>",
+        },
+        {
+          no: 7,
+          soal: "\\log_{3}12 + \\log_{3}5x = \\log_{3}15",
+          hint: "Gunakan sifat penjumlahan logaritma di ruas kiri: \\(\\log_a b + \\log_a c = \\log_a(b \\cdot c)\\).",
+          pembahasan:
+            "Sederhanakan ruas kiri:<br>\\(\\log_{3}(12 \\cdot 5x) = \\log_{3}15\\)<br>\\(\\log_{3}(60x) = \\log_{3}15\\)<br><br>Samakan numerus:<br>\\(60x = 15\\)<br>\\(x = \\frac{15}{60} = \\frac{1}{4}\\)<br><br>Syarat numerus \\(5x > 0\\) terpenuhi untuk \\(x = 1/4\\).<br><strong>HP = {1/4}</strong>",
+        },
+        {
+          no: 8,
+          soal: "\\log_{7}(6x-1) - \\log_{7}(x-3) = 1",
+          hint: "Ubah angka 1 di ruas kanan menjadi logaritma basis 7, yaitu \\(\\log_7 7\\). Lalu gunakan sifat pembagian logaritma di ruas kiri.",
+          pembahasan:
+            "Persamaan menjadi:<br>\\(\\log_{7}\\left(\\frac{6x-1}{x-3}\\right) = \\log_{7} 7\\)<br><br>Samakan numerus:<br>\\(\\frac{6x-1}{x-3} = 7\\)<br>\\(6x - 1 = 7(x - 3)\\)<br>\\(6x - 1 = 7x - 21\\)<br>\\(x = 20\\)<br><br>Cek numerus untuk \\(x=20\\):<br>\\(6(20)-1 > 0\\) dan \\(20-3 > 0\\) (Memenuhi).<br><strong>HP = {20}</strong>",
+        },
+        {
+          no: 9,
+          soal: "\\log_{18}(2x+6) + \\log_{18}(x-5) = 1",
+          hint: "Gabungkan ruas kiri dengan sifat perkalian numerus. Ubah ruas kanan menjadi \\(\\log_{18} 18\\). Kamu akan mendapatkan persamaan kuadrat.",
+          pembahasan:
+            "Persamaan:<br>\\(\\log_{18}((2x+6)(x-5)) = \\log_{18} 18\\)<br><br>Samakan numerus:<br>\\((2x+6)(x-5) = 18\\)<br>\\(2x^2 - 10x + 6x - 30 = 18\\)<br>\\(2x^2 - 4x - 48 = 0\\)<br>Bagi 2: \\(x^2 - 2x - 24 = 0\\)<br>\\((x - 6)(x + 4) = 0\\)<br>\\(x = 6\\) atau \\(x = -4\\).<br><br>Cek syarat numerus (\\(2x+6>0\\) dan \\(x-5>0 \\Rightarrow x>5\\)):<br>- \\(x = 6 > 5\\) (Memenuhi)<br>- \\(x = -4\\) (Tidak memenuhi karena \\(-4 - 5 = -9 < 0\\)).<br><strong>HP = {6}</strong>",
+        },
+        {
+          no: 10,
+          soal: "\\log_{8}(2x-5) = \\log_{2}3",
+          hint: "Basisnya berbeda (8 dan 2). Ubah basis 8 menjadi \\(2^3\\), lalu gunakan sifat \\(\\log_{a^n} b^m = \\frac{m}{n} \\log_a b\\).",
+          pembahasan:
+            "Ubah basis:<br>\\(\\log_{2^3}(2x-5)^1 = \\log_{2}3\\)<br>\\(\\frac{1}{3} \\log_{2}(2x-5) = \\log_{2}3\\)<br>Pindahkan 1/3 menjadi pangkat numerus ruas kiri:<br>\\(\\log_{2}(2x-5)^{\\frac{1}{3}} = \\log_{2}3\\)<br><br>Samakan numerus:<br>\\((2x-5)^{\\frac{1}{3}} = 3\\)<br>Pangkatkan 3 kedua ruas:<br>\\(2x - 5 = 3^3\\)<br>\\(2x - 5 = 27\\)<br>\\(2x = 32 \\Rightarrow x = 16\\).<br><br>Cek numerus: \\(2(16)-5 = 27 > 0\\) (Memenuhi).<br><strong>HP = {16}</strong>",
+        },
+        {
+          no: 11,
+          soal: "\\log_{2}(x-8) + \\log_{2}(x+2) - \\log_{2}(2x+17) = 0",
+          hint: "Gabungkan semua logaritma di ruas kiri: penjumlahan menjadi perkalian, pengurangan menjadi pembagian. Samakan dengan \\(2^0\\).",
+          pembahasan:
+            "Gabungkan ruas kiri:<br>\\(\\log_{2}\\left(\\frac{(x-8)(x+2)}{2x+17}\\right) = 0\\)<br>\\(\\frac{x^2 - 6x - 16}{2x + 17} = 2^0 = 1\\)<br><br>Kalikan silang:<br>\\(x^2 - 6x - 16 = 2x + 17\\)<br>\\(x^2 - 8x - 33 = 0\\)<br>\\((x - 11)(x + 3) = 0\\)<br>\\(x = 11\\) atau \\(x = -3\\).<br><br>Syarat numerus paling ketat adalah \\(x-8 > 0 \\Rightarrow x > 8\\).<br>Maka \\(x = -3\\) tidak memenuhi (TM).<br><strong>HP = {11}</strong>",
+        },
+        {
+          no: 12,
+          soal: "3 \\log 2 - \\log(2x+2) + \\log(x+1) - \\log x = 0",
+          hint: "Ganti \\(3 \\log 2\\) menjadi \\(\\log 2^3\\) atau \\(\\log 8\\). Kelompokkan logaritma bernilai positif dan negatif untuk membentuk satu pecahan besar.",
+          pembahasan:
+            "Sifat \\(a \\log b = \\log b^a\\):<br>\\(\\log 8 - \\log(2(x+1)) + \\log(x+1) - \\log x = 0\\)<br>Gabungkan:<br>\\(\\log \\left( \\frac{8(x+1)}{2(x+1)x} \\right) = 0\\)<br>\\(\\frac{8(x+1)}{2x(x+1)} = 10^0 = 1\\)<br><br>Karena dari awal ada syarat numerus \\(x+1 > 0\\), maka \\(x+1\\) bukan nol dan bisa dicoret:<br>\\(\\frac{8}{2x} = 1\\)<br>\\(\\frac{4}{x} = 1 \\Rightarrow x = 4\\).<br><br>Cek numerus untuk \\(x=4\\) semuanya positif. Memenuhi.<br><strong>HP = {4}</strong>",
+        },
+        {
+          no: 13,
+          soal: "\\log_{x}(x-1) - \\log_{x}(2x-3) = 0",
+          hint: "Pindahkan logaritma bernegatif ke kanan. Ingat syarat ketat untuk basis logaritma (jika basis berupa variabel): Basis \\(> 0\\) dan Basis \\(\\neq 1\\).",
+          pembahasan:
+            "Ubah bentuk:<br>\\(\\log_{x}(x-1) = \\log_{x}(2x-3)\\)<br><br>Samakan numerus:<br>\\(x - 1 = 2x - 3\\)<br>\\(x = 2\\)<br><br>Cek syarat:<br>- Basis: \\(x=2 > 0\\) dan \\(2 \\neq 1\\) (OK)<br>- Numerus: \\(2-1 > 0\\) (OK), \\(2(2)-3 > 0\\) (OK)<br><strong>HP = {2}</strong>",
+        },
+        {
+          no: 14,
+          soal: "\\log_{\\frac{1}{2}}(x^{2}-3) - \\log_{\\frac{1}{2}}x = -1",
+          hint: "Ubah angka -1 di ruas kanan menjadi logaritma dengan basis 1/2. \\(-1 = \\log_{\\frac{1}{2}} (\\frac{1}{2})^{-1}\\).",
+          pembahasan:
+            "Ruas kanan: \\(-1 = \\log_{\\frac{1}{2}} (\\frac{1}{2})^{-1} = \\log_{\\frac{1}{2}} 2\\).<br>Ruas kiri gabungkan:<br>\\(\\log_{\\frac{1}{2}}\\left(\\frac{x^2-3}{x}\\right) = \\log_{\\frac{1}{2}} 2\\)<br><br>Samakan numerus:<br>\\(\\frac{x^2-3}{x} = 2\\)<br>\\(x^2 - 3 = 2x\\)<br>\\(x^2 - 2x - 3 = 0\\)<br>\\((x - 3)(x + 1) = 0\\)<br>\\(x = 3\\) atau \\(x = -1\\).<br><br>Cek numerus awal (\\(x > 0\\)), maka \\(x = -1\\) TM.<br><strong>HP = {3}</strong>",
+        },
+        {
+          no: 15,
+          soal: "\\log_{3}(4x^{2}-4x+9) - \\log_{3}(4x+21) = 0",
+          hint: "Pindahkan satu ruas sehingga persamaannya \\(\\log_3 f(x) = \\log_3 g(x)\\), lalu samakan \\(f(x) = g(x)\\).",
+          pembahasan:
+            "\\(\\log_{3}(4x^{2}-4x+9) = \\log_{3}(4x+21)\\)<br><br>Samakan numerus:<br>\\(4x^{2} - 4x + 9 = 4x + 21\\)<br>\\(4x^{2} - 8x - 12 = 0\\)<br>Bagi 4: \\(x^2 - 2x - 3 = 0\\)<br>\\((x - 3)(x + 1) = 0\\)<br>\\(x = 3\\) atau \\(x = -1\\).<br><br>Cek numerus untuk kedua nilai memberikan hasil positif. (Misal \\(x=-1 \\Rightarrow 4(-1)+21 = 17 > 0\\)). Keduanya memenuhi.<br><strong>HP = {-1, 3}</strong>",
+        },
+        {
+          no: 16,
+          soal: "\\log_{0.25}(x+1) + \\log_{16}(x+3) = 0",
+          hint: "Ubah basis 0.25 (sama dengan 1/4 atau \\(4^{-1}\\)) dan 16 (sama dengan \\(4^2\\)) ke basis 4.",
+          pembahasan:
+            "Ubah basis ke 4:<br>\\(\\log_{4^{-1}}(x+1) + \\log_{4^2}(x+3) = 0\\)<br>\\(-\\log_{4}(x+1) + \\frac{1}{2}\\log_{4}(x+3) = 0\\)<br>Pindah ruas:<br>\\(\\frac{1}{2}\\log_{4}(x+3) = \\log_{4}(x+1)\\)<br>\\(\\log_{4}(x+3)^{\\frac{1}{2}} = \\log_{4}(x+1)\\)<br><br>Samakan numerus:\\(\\sqrt{x+3} = x+1\\)<br>Kuadratkan kedua ruas:<br>\\(x + 3 = x^2 + 2x + 1\\)<br>\\(x^2 + x - 2 = 0\\)<br>\\((x + 2)(x - 1) = 0\\)<br>\\(x = -2\\) atau \\(x = 1\\).<br><br>Cek syarat awal \\(x+1 > 0 \\Rightarrow x > -1\\). Maka \\(x = -2\\) TM.<br><strong>HP = {1}</strong>",
+        },
+        {
+          no: 17,
+          soal: "\\log_{\\sqrt{5}}(5x+6) = \\log_{\\sqrt{7}}(5x+6)",
+          hint: "Perhatikan bahwa BASISNYA BERBEDA, tapi NUMERUSNYA SAMA. Jika \\(\\log_a f(x) = \\log_b f(x)\\) dengan \\(a \\neq b\\), maka satu-satunya cara agar sama adalah numerusnya bernilai 1.",
+          pembahasan:
+            "Karena basis berbeda dan numerus sama, maka:<br>\\(5x + 6 = 1\\)<br>\\(5x = -5\\)<br>\\(x = -1\\)<br><strong>HP = {-1}</strong>",
+        },
+        {
+          no: 18,
+          soal: "\\log_{(2x-1)}2 = \\log_{(x+3)}2",
+          hint: "Sekarang numerusnya sama-sama konstan (2), tapi basisnya berbentuk fungsi. Syarat utamanya: basisnya harus sama.",
+          pembahasan:
+            "Samakan basis:<br>\\(2x - 1 = x + 3\\)<br>\\(x = 4\\)<br><br>Cek syarat basis (\\(>0\\) dan \\(\\neq 1\\)):<br>Untuk \\(x=4\\): Basis kiri = \\(2(4)-1 = 7\\) (OK). Basis kanan = \\(4+3 = 7\\) (OK).<br><strong>HP = {4}</strong>",
+        },
+        {
+          no: 19,
+          soal: "\\log_{(3x+2)}27 = \\log_{5}3",
+          hint: "Ubah bentuk 27 menjadi \\(3^3\\). Gunakan sifat perubahan basis membalik: \\(\\log_a b = \\frac{1}{\\log_b a}\\) untuk menyamakan numerus atas menjadi 3.",
+          pembahasan:
+            "Sederhanakan ruas kiri:<br>\\(\\log_{3x+2} 3^3 = \\log_{5}3\\)<br>\\(3 \\cdot \\log_{3x+2} 3 = \\log_{5}3\\)<br><br>Ubah bentuk pecahan agar mudah:\\(\\frac{3}{\\log_3(3x+2)} = \\frac{1}{\\log_3 5}\\)<br>Kalikan silang:<br>\\(\\log_3(3x+2) = 3 \\log_3 5\\)<br>\\(\\log_3(3x+2) = \\log_3 5^3\\)<br>\\(\\log_3(3x+2) = \\log_3 125\\)<br><br>Samakan numerus:<br>\\(3x + 2 = 125\\)<br>\\(3x = 123 \\Rightarrow x = 41\\).<br><strong>HP = {41}</strong>",
+        },
+        {
+          no: 20,
+          soal: "\\log_{8}(x^{2}-4x-50) - \\log_{8}(2x+6) = \\frac{\\log 9}{\\log 8}",
+          hint: "Ingat sifat perubahan basis: \\(\\frac{\\log a}{\\log b} = \\log_b a\\). Jadi ruas kanan sebenarnya adalah \\(\\log_8 9\\).",
+          pembahasan:
+            "Ruas kanan: \\(\\frac{\\log 9}{\\log 8} = \\log_8 9\\).<br>Persamaan menjadi:<br>\\(\\log_8 \\left( \\frac{x^2-4x-50}{2x+6} \\right) = \\log_8 9\\)<br><br>Samakan numerus:<br>\\(\\frac{x^2-4x-50}{2x+6} = 9\\)<br>\\(x^2 - 4x - 50 = 18x + 54\\)<br>\\(x^2 - 22x - 104 = 0\\)<br>\\((x - 26)(x + 4) = 0\\)<br>\\(x = 26\\) atau \\(x = -4\\).<br><br>Syarat numerus penyebut \\(2x+6 > 0 \\Rightarrow x > -3\\). Maka \\(x = -4\\) tidak memenuhi (TM).<br>Cek \\(x = 26\\) ke pembilang: \\(26^2 - 4(26) - 50 > 0\\) (Memenuhi).<br><strong>HP = {26}</strong>",
+        },
+        {
+          no: 21,
+          soal: "(\\log_{2}(2x-2))^{2} - \\log_{2}(2x-2) = 2",
+          hint: "Gunakan metode substitusi/pemisalan. Misalkan variabel \\(P = \\log_2(2x-2)\\) untuk membentuk persamaan kuadrat biasa.",
+          pembahasan:
+            "Misalkan \\(P = \\log_2(2x-2)\\). Persamaan menjadi:<br>\\(P^2 - P - 2 = 0\\)<br>\\((P - 2)(P + 1) = 0\\)<br>\\(P = 2\\) atau \\(P = -1\\).<br><br>Kembalikan nilai P:<br>Kasus 1: \\(\\log_2(2x-2) = 2 \\Rightarrow 2x-2 = 2^2 \\Rightarrow 2x = 6 \\Rightarrow x = 3\\)<br>Kasus 2: \\(\\log_2(2x-2) = -1 \\Rightarrow 2x-2 = 2^{-1} = 0.5 \\Rightarrow 2x = 2.5 \\Rightarrow x = 1.25\\) atau \\(5/4\\).<br><br>Kedua nilai memenuhi syarat numerus \\(2x-2 > 0\\).<br><strong>HP = {5/4, 3}</strong>",
+        },
+      ];
+
+      // Fungsi rendering ke DOM
+      const container = document.getElementById("quiz-container");
+
+      soalData.forEach((item) => {
+        // Buat bungkus card
+        const card = document.createElement("div");
+        card.className = "question-card";
+
+        // Teks soal
+        const questionText = document.createElement("div");
+        questionText.className = "question-text";
+        questionText.innerHTML = `${item.no}. \\( ${item.soal} \\)`;
+
+        // Grup tombol
+        const btnGroup = document.createElement("div");
+        btnGroup.className = "btn-group";
+
+        const btnHint = document.createElement("button");
+        btnHint.className = "btn-hint";
+        btnHint.innerText = "Tampilkan Hint";
+
+        const btnSol = document.createElement("button");
+        btnSol.className = "btn-sol";
+        btnSol.innerText = "Tampilkan Pembahasan";
+
+        // Kontainer jawaban tersembunyi
+        const hintBox = document.createElement("div");
+        hintBox.className = "hidden reveal-box hint-content";
+        hintBox.innerHTML = `<strong>💡 Hint:</strong> ${item.hint}`;
+
+        const solBox = document.createElement("div");
+        solBox.className = "hidden reveal-box sol-content";
+        solBox.innerHTML = `<strong>📝 Pembahasan:</strong><br>${item.pembahasan}`;
+
+        // Event listener toggle visibility
+        btnHint.addEventListener("click", () => {
+          const isHidden = hintBox.classList.contains("hidden");
+          hintBox.classList.toggle("hidden");
+          btnHint.innerText = isHidden ? "Sembunyikan Hint" : "Tampilkan Hint";
+        });
+
+        btnSol.addEventListener("click", () => {
+          const isHidden = solBox.classList.contains("hidden");
+          solBox.classList.toggle("hidden");
+          btnSol.innerText = isHidden
+            ? "Sembunyikan Pembahasan"
+            : "Tampilkan Pembahasan";
+        });
+
+        // Merakit DOM
+        btnGroup.appendChild(btnHint);
+        btnGroup.appendChild(btnSol);
+        card.appendChild(questionText);
+        card.appendChild(btnGroup);
+        card.appendChild(hintBox);
+        card.appendChild(solBox);
+        container.appendChild(card);
+      });
+    </script>
+  </body>
+</html>
