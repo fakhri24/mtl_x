@@ -361,7 +361,11 @@
             totalQuestions = data.totalQuestions || 0;
             totalCorrect = data.totalCorrect || 0;
             totalWrong = data.totalWrong || 0;
-            usedQuestions = data.usedQuestions || [[], [], [], []];
+            if (data.usedQuestions) {
+              usedQuestions = JSON.parse(data.usedQuestions);
+            } else {
+              usedQuestions = [[], [], [], []];
+            }
           } else {
             // Jika siswa baru pertama kali login, reset variabel ke 0
             currentLevel = 0;
@@ -390,12 +394,12 @@
           totalQuestions: totalQuestions,
           totalCorrect: totalCorrect,
           totalWrong: totalWrong,
-          usedQuestions: usedQuestions,
+          // UBAH BARIS DI BAWAH INI:
+          usedQuestions: JSON.stringify(usedQuestions),
           terakhirMengerjakan: new Date(),
         };
 
         try {
-          // Menyimpan/menimpa data siswa spesifik menggunakan UID mereka
           await setDoc(doc(db, "progres_logaritma", currentUID), dataToSave);
         } catch (error) {
           console.error("Gagal menyimpan progres: ", error);
