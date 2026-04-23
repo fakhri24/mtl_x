@@ -322,7 +322,7 @@
         if (!nis || !password) return alert("Isi NIS dan Password!");
 
         // TRIK: Gabungkan NIS menjadi email palsu
-        const dummyEmail = nis + "@asrama.edu";
+        const dummyEmail = nis + "@mtl.edu";
 
         signInWithEmailAndPassword(auth, dummyEmail, password)
           .then(() => {
