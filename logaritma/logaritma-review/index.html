@@ -308,7 +308,7 @@
       onAuthStateChanged(auth, (user) => {
         if (user) {
           currentUID = user.uid;
-          showScreen(true);
+          // showScreen(true);
           loadProgress(); // Tarik data dari Firestore setelah login
         } else {
           currentUID = null;
@@ -321,16 +321,25 @@
         const password = document.getElementById("passwordInput").value;
         if (!nis || !password) return alert("Isi NIS dan Password!");
 
+        // Ubah tombol jadi "Memproses..." agar terlihat profesional
+        const btnLogin = document.querySelector(".login-form button");
+        btnLogin.innerText = "Memproses...";
+        btnLogin.disabled = true;
+
         // TRIK: Gabungkan NIS menjadi email palsu
         const dummyEmail = nis + "@mtl.edu";
 
         signInWithEmailAndPassword(auth, dummyEmail, password)
           .then(() => {
             console.log("Login Sukses");
+            btnLogin.innerText = "Login";
+            btnLogin.disabled = false;
           })
           .catch((error) => {
             alert("NIS atau Password salah!");
             console.error(error);
+            btnLogin.innerText = "Login";
+            btnLogin.disabled = false;
           });
       };
 
@@ -379,6 +388,7 @@
 
           updateUI();
           renderQuestion(); // Tampilkan soal SETELAH data dimuat
+          showScreen(true);
         } catch (error) {
           console.error("Gagal mengambil data progres: ", error);
         }
