@@ -175,9 +175,9 @@
         {
           no: 5,
           soal: "\\log_{5}(x+2) - \\log_{5}(x^{2}) = 0",
-          hint: "Gunakan sifat pengurangan logaritma: \\(\\log_a b - \\log_a c = \\log_a(\\frac{b}{c})\\). Atau, pindahkan salah satu logaritma ke ruas kanan sehingga menjadi \\(\\log_a b = \\log_a c\\).",
+          hint: "Pindahkan \\(-\\log_{5}(x^{2})\\) ke ruas kanan terlebih dahulu agar tandanya menjadi positif. Karena basisnya sudah sama, kamu bisa langsung menyamakan numerusnya tanpa perlu membaginya menjadi bentuk pecahan.",
           pembahasan:
-            "Pindahkan ke ruas kanan:<br>\\(\\log_{5}(x+2) = \\log_{5}(x^{2})\\)<br><br>Samakan numerus:<br>\\(x + 2 = x^2\\)<br>\\(x^2 - x - 2 = 0\\)<br>\\((x - 2)(x + 1) = 0\\)<br>\\(x = 2\\) atau \\(x = -1\\).<br><br>Cek syarat numerus (\\(x+2>0\\) dan \\(x^2>0\\)):<br>- Untuk \\(x=2\\): \\(2+2=4>0\\) dan \\(2^2=4>0\\) (Memenuhi)<br>- Untuk \\(x=-1\\): \\(-1+2=1>0\\) dan \\((-1)^2=1>0\\) (Memenuhi)<br><strong>HP = {-1, 2}</strong>",
+            "Pindahkan logaritma bernilai negatif ke ruas kanan (menjadi penjumlahan):<br>\\(\\log_{5}(x+2) = 0 + \\log_{5}(x^{2})\\)<br>\\(\\log_{5}(x+2) = \\log_{5}(x^{2})\\)<br><br>Samakan numerus:<br>\\(x + 2 = x^2\\)<br>\\(x^2 - x - 2 = 0\\)<br>\\((x - 2)(x + 1) = 0\\)<br>\\(x = 2\\) atau \\(x = -1\\).<br><br>Cek syarat numerus (\\(x+2>0\\) dan \\(x^2>0\\)):<br>- Untuk \\(x=2\\): \\(2+2=4>0\\) dan \\(2^2=4>0\\) (Memenuhi)<br>- Untuk \\(x=-1\\): \\(-1+2=1>0\\) dan \\((-1)^2=1>0\\) (Memenuhi)<br><strong>HP = {-1, 2}</strong>",
         },
         {
           no: 6,
@@ -196,9 +196,9 @@
         {
           no: 8,
           soal: "\\log_{7}(6x-1) - \\log_{7}(x-3) = 1",
-          hint: "Ubah angka 1 di ruas kanan menjadi logaritma basis 7, yaitu \\(\\log_7 7\\). Lalu gunakan sifat pembagian logaritma di ruas kiri.",
+          hint: "Pindahkan \\(-\\log_{7}(x-3)\\) ke ruas kanan agar positif. Ubah angka 1 menjadi \\(\\log_7 7\\), lalu gunakan sifat penjumlahan logaritma: \\(\\log_a b + \\log_a c = \\log_a(b \\cdot c)\\).",
           pembahasan:
-            "Persamaan menjadi:<br>\\(\\log_{7}\\left(\\frac{6x-1}{x-3}\\right) = \\log_{7} 7\\)<br><br>Samakan numerus:<br>\\(\\frac{6x-1}{x-3} = 7\\)<br>\\(6x - 1 = 7(x - 3)\\)<br>\\(6x - 1 = 7x - 21\\)<br>\\(x = 20\\)<br><br>Cek numerus untuk \\(x=20\\):<br>\\(6(20)-1 > 0\\) dan \\(20-3 > 0\\) (Memenuhi).<br><strong>HP = {20}</strong>",
+            "Pindahkan logaritma bernilai negatif ke ruas kanan:<br>\\(\\log_{7}(6x-1) = 1 + \\log_{7}(x-3)\\)<br><br>Ubah 1 menjadi logaritma basis 7 dan gunakan sifat penjumlahan perkalian numerus:<br>\\(\\log_{7}(6x-1) = \\log_{7} 7 + \\log_{7}(x-3)\\)<br>\\(\\log_{7}(6x-1) = \\log_{7}(7(x-3))\\)<br>\\(\\log_{7}(6x-1) = \\log_{7}(7x-21)\\)<br><br>Samakan numerus:<br>\\(6x - 1 = 7x - 21\\)<br>\\(20 = x \\Rightarrow x = 20\\)<br><br>Cek syarat numerus untuk \\(x=20\\):<br>\\(6(20)-1 = 119 > 0\\) dan \\(20-3 = 17 > 0\\) (Memenuhi).<br><strong>HP = {20}</strong>",
         },
         {
           no: 9,
@@ -210,23 +210,23 @@
         {
           no: 10,
           soal: "\\log_{8}(2x-5) = \\log_{2}3",
-          hint: "Basisnya berbeda (8 dan 2). Ubah basis 8 menjadi \\(2^3\\), lalu gunakan sifat \\(\\log_{a^n} b^m = \\frac{m}{n} \\log_a b\\).",
+          hint: "Basisnya berbeda (8 dan 2). Daripada mengubah 8 menjadi pangkat pecahan, lebih mudah mengubah ruas kanan. Pangkatkan basis dan numerus di ruas kanan dengan 3 menggunakan sifat \\(\\log_a b = \\log_{a^n} b^n\\) agar basisnya menjadi 8.",
           pembahasan:
-            "Ubah basis:<br>\\(\\log_{2^3}(2x-5)^1 = \\log_{2}3\\)<br>\\(\\frac{1}{3} \\log_{2}(2x-5) = \\log_{2}3\\)<br>Pindahkan 1/3 menjadi pangkat numerus ruas kiri:<br>\\(\\log_{2}(2x-5)^{\\frac{1}{3}} = \\log_{2}3\\)<br><br>Samakan numerus:<br>\\((2x-5)^{\\frac{1}{3}} = 3\\)<br>Pangkatkan 3 kedua ruas:<br>\\(2x - 5 = 3^3\\)<br>\\(2x - 5 = 27\\)<br>\\(2x = 32 \\Rightarrow x = 16\\).<br><br>Cek numerus: \\(2(16)-5 = 27 > 0\\) (Memenuhi).<br><strong>HP = {16}</strong>",
+            "Ubah basis ruas kanan agar menjadi 8:<br>\\(\\log_{8}(2x-5) = \\log_{2^3} 3^3\\)<br>\\(\\log_{8}(2x-5) = \\log_{8} 27\\)<br><br>Karena basis logaritma sudah sama, langsung samakan numerusnya:<br>\\(2x - 5 = 27\\)<br>\\(2x = 32 \\Rightarrow x = 16\\).<br><br>Cek numerus untuk memastikan hasilnya valid:<br>\\(2(16)-5 = 27 > 0\\) (Memenuhi).<br><strong>HP = {16}</strong>",
         },
         {
           no: 11,
           soal: "\\log_{2}(x-8) + \\log_{2}(x+2) - \\log_{2}(2x+17) = 0",
-          hint: "Gabungkan semua logaritma di ruas kiri: penjumlahan menjadi perkalian, pengurangan menjadi pembagian. Samakan dengan \\(2^0\\).",
+          hint: "Daripada membuat bentuk pecahan di ruas kiri, pindahkan \\(-\\log_{2}(2x+17)\\) ke ruas kanan terlebih dahulu agar tandanya menjadi positif. Setelah itu, gunakan sifat penjumlahan logaritma untuk menggabungkan ruas kiri.",
           pembahasan:
-            "Gabungkan ruas kiri:<br>\\(\\log_{2}\\left(\\frac{(x-8)(x+2)}{2x+17}\\right) = 0\\)<br>\\(\\frac{x^2 - 6x - 16}{2x + 17} = 2^0 = 1\\)<br><br>Kalikan silang:<br>\\(x^2 - 6x - 16 = 2x + 17\\)<br>\\(x^2 - 8x - 33 = 0\\)<br>\\((x - 11)(x + 3) = 0\\)<br>\\(x = 11\\) atau \\(x = -3\\).<br><br>Syarat numerus paling ketat adalah \\(x-8 > 0 \\Rightarrow x > 8\\).<br>Maka \\(x = -3\\) tidak memenuhi (TM).<br><strong>HP = {11}</strong>",
+            "Pindahkan logaritma bernilai negatif ke ruas kanan:<br>\\(\\log_{2}(x-8) + \\log_{2}(x+2) = \\log_{2}(2x+17)\\)<br><br>Gunakan sifat penjumlahan (perkalian numerus) di ruas kiri:<br>\\(\\log_{2}((x-8)(x+2)) = \\log_{2}(2x+17)\\)<br><br>Karena basis logaritma sudah sama, langsung samakan numerusnya:<br>\\((x-8)(x+2) = 2x + 17\\)<br>\\(x^2 - 6x - 16 = 2x + 17\\)<br>Pindahkan semua ke ruas kiri:<br>\\(x^2 - 8x - 33 = 0\\)<br>\\((x - 11)(x + 3) = 0\\)<br>\\(x = 11\\) atau \\(x = -3\\).<br><br>Cek syarat numerus (paling ketat adalah \\(x-8 > 0 \\Rightarrow x > 8\\)):<br>- Untuk \\(x = 11 > 8\\) (Memenuhi)<br>- Untuk \\(x = -3 < 8\\) (Tidak Memenuhi / TM)<br><strong>HP = {11}</strong>",
         },
         {
           no: 12,
           soal: "3 \\log 2 - \\log(2x+2) + \\log(x+1) - \\log x = 0",
-          hint: "Ganti \\(3 \\log 2\\) menjadi \\(\\log 2^3\\) atau \\(\\log 8\\). Kelompokkan logaritma bernilai positif dan negatif untuk membentuk satu pecahan besar.",
+          hint: "Pindahkan logaritma yang bernilai negatif (\\(-\\log(2x+2)\\) dan \\(-\\log x\\)) ke ruas kanan agar menjadi positif. Ubah \\(3 \\log 2\\) menjadi \\(\\log 2^3\\), lalu gunakan sifat penjumlahan logaritma (perkalian numerus) di kedua ruas.",
           pembahasan:
-            "Sifat \\(a \\log b = \\log b^a\\):<br>\\(\\log 8 - \\log(2(x+1)) + \\log(x+1) - \\log x = 0\\)<br>Gabungkan:<br>\\(\\log \\left( \\frac{8(x+1)}{2(x+1)x} \\right) = 0\\)<br>\\(\\frac{8(x+1)}{2x(x+1)} = 10^0 = 1\\)<br><br>Karena dari awal ada syarat numerus \\(x+1 > 0\\), maka \\(x+1\\) bukan nol dan bisa dicoret:<br>\\(\\frac{8}{2x} = 1\\)<br>\\(\\frac{4}{x} = 1 \\Rightarrow x = 4\\).<br><br>Cek numerus untuk \\(x=4\\) semuanya positif. Memenuhi.<br><strong>HP = {4}</strong>",
+            "Pindahkan logaritma bernilai negatif ke ruas kanan:<br>\\(3 \\log 2 + \\log(x+1) = \\log(2x+2) + \\log x\\)<br><br>Ubah koefisien menjadi pangkat (\\(3 \\log 2 = \\log 2^3 = \\log 8\\)), lalu gunakan sifat penjumlahan (perkalian numerus) di kedua ruas:<br>\\(\\log 8 + \\log(x+1) = \\log(2x+2) + \\log x\\)<br>\\(\\log(8(x+1)) = \\log(x(2x+2))\\)<br><br>Karena basis logaritma sudah sama (10), langsung samakan numerusnya:<br>\\(8(x+1) = x(2x+2)\\)<br>\\(8x + 8 = 2x^2 + 2x\\)<br>Pindahkan semua ke satu ruas:<br>\\(2x^2 - 6x - 8 = 0\\)<br>Bagi 2 agar lebih sederhana: \\(x^2 - 3x - 4 = 0\\)<br>\\((x - 4)(x + 1) = 0\\)<br>\\(x = 4\\) atau \\(x = -1\\).<br><br>Cek syarat numerus awal (\\(2x+2>0\\), \\(x+1>0\\), dan \\(x>0\\)). Syarat paling ketat adalah \\(x > 0\\):<br>- Untuk \\(x = 4 > 0\\) (Memenuhi)<br>- Untuk \\(x = -1 < 0\\) (Tidak Memenuhi / TM)<br><strong>HP = {4}</strong>",
         },
         {
           no: 13,
@@ -238,9 +238,9 @@
         {
           no: 14,
           soal: "\\log_{\\frac{1}{2}}(x^{2}-3) - \\log_{\\frac{1}{2}}x = -1",
-          hint: "Ubah angka -1 di ruas kanan menjadi logaritma dengan basis 1/2. \\(-1 = \\log_{\\frac{1}{2}} (\\frac{1}{2})^{-1}\\).",
+          hint: "Pindahkan \\(-\\log_{\\frac{1}{2}}x\\) ke ruas kanan agar menjadi positif. Ubah angka -1 menjadi logaritma dengan basis 1/2, yaitu \\(\\log_{\\frac{1}{2}} 2\\), lalu gabungkan ruas kanan dengan sifat penjumlahan.",
           pembahasan:
-            "Ruas kanan: \\(-1 = \\log_{\\frac{1}{2}} (\\frac{1}{2})^{-1} = \\log_{\\frac{1}{2}} 2\\).<br>Ruas kiri gabungkan:<br>\\(\\log_{\\frac{1}{2}}\\left(\\frac{x^2-3}{x}\\right) = \\log_{\\frac{1}{2}} 2\\)<br><br>Samakan numerus:<br>\\(\\frac{x^2-3}{x} = 2\\)<br>\\(x^2 - 3 = 2x\\)<br>\\(x^2 - 2x - 3 = 0\\)<br>\\((x - 3)(x + 1) = 0\\)<br>\\(x = 3\\) atau \\(x = -1\\).<br><br>Cek numerus awal (\\(x > 0\\)), maka \\(x = -1\\) TM.<br><strong>HP = {3}</strong>",
+            "Pindahkan logaritma bernilai negatif ke ruas kanan:<br>\\(\\log_{\\frac{1}{2}}(x^{2}-3) = -1 + \\log_{\\frac{1}{2}}x\\)<br><br>Ubah -1 menjadi \\(\\log_{\\frac{1}{2}} (\\frac{1}{2})^{-1} = \\log_{\\frac{1}{2}} 2\\):<br>\\(\\log_{\\frac{1}{2}}(x^{2}-3) = \\log_{\\frac{1}{2}} 2 + \\log_{\\frac{1}{2}}x\\)<br><br>Gunakan sifat penjumlahan (perkalian numerus) di ruas kanan:<br>\\(\\log_{\\frac{1}{2}}(x^{2}-3) = \\log_{\\frac{1}{2}}(2x)\\)<br><br>Karena basis logaritma sudah sama, langsung samakan numerusnya:<br>\\(x^2 - 3 = 2x\\)<br>Pindahkan semua ke ruas kiri:<br>\\(x^2 - 2x - 3 = 0\\)<br>\\((x - 3)(x + 1) = 0\\)<br>\\(x = 3\\) atau \\(x = -1\\).<br><br>Cek syarat numerus awal (\\(x > 0\\) dan \\(x^2 - 3 > 0\\)):<br>- Untuk \\(x = 3\\): \\(3 > 0\\) dan \\(3^2 - 3 = 6 > 0\\) (Memenuhi)<br>- Untuk \\(x = -1\\): \\(-1 < 0\\) (Tidak Memenuhi / TM)<br><strong>HP = {3}</strong>",
         },
         {
           no: 15,
@@ -273,16 +273,16 @@
         {
           no: 19,
           soal: "\\log_{(3x+2)}27 = \\log_{5}3",
-          hint: "Ubah bentuk 27 menjadi \\(3^3\\). Gunakan sifat perubahan basis membalik: \\(\\log_a b = \\frac{1}{\\log_b a}\\) untuk menyamakan numerus atas menjadi 3.",
+          hint: "Numerus di ruas kiri adalah 27 (atau \\(3^3\\)). Coba ubah ruas kanan agar numerusnya juga menjadi 27 dengan cara memangkatkan basis dan numerusnya dengan pangkat 3, menggunakan sifat \\(\\log_a b = \\log_{a^n} b^n\\).",
           pembahasan:
-            "Sederhanakan ruas kiri:<br>\\(\\log_{3x+2} 3^3 = \\log_{5}3\\)<br>\\(3 \\cdot \\log_{3x+2} 3 = \\log_{5}3\\)<br><br>Ubah bentuk pecahan agar mudah:\\(\\frac{3}{\\log_3(3x+2)} = \\frac{1}{\\log_3 5}\\)<br>Kalikan silang:<br>\\(\\log_3(3x+2) = 3 \\log_3 5\\)<br>\\(\\log_3(3x+2) = \\log_3 5^3\\)<br>\\(\\log_3(3x+2) = \\log_3 125\\)<br><br>Samakan numerus:<br>\\(3x + 2 = 125\\)<br>\\(3x = 123 \\Rightarrow x = 41\\).<br><strong>HP = {41}</strong>",
+            "Daripada menggunakan pecahan, kita samakan numerusnya menjadi 27.<br>Ruas kiri numerusnya sudah 27.<br>Ubah ruas kanan dengan memangkatkan basis dan numerus dengan 3:<br>\\(\\log_{5} 3 = \\log_{5^3} 3^3 = \\log_{125} 27\\)<br><br>Persamaan barunya menjadi:<br>\\(\\log_{(3x+2)} 27 = \\log_{125} 27\\)<br><br>Karena numerusnya sudah sama persis (dan bukan 1), maka basisnya pasti bernilai sama:<br>\\(3x + 2 = 125\\)<br>\\(3x = 125 - 2\\)<br>\\(3x = 123 \\Rightarrow x = 41\\).<br><br>Cek syarat basis pada ruas kiri (harus \\(> 0\\) dan \\(\\neq 1\\)):<br>\\(3(41) + 2 = 125\\) (Memenuhi).<br><strong>HP = {41}</strong>",
         },
         {
           no: 20,
           soal: "\\log_{8}(x^{2}-4x-50) - \\log_{8}(2x+6) = \\frac{\\log 9}{\\log 8}",
-          hint: "Ingat sifat perubahan basis: \\(\\frac{\\log a}{\\log b} = \\log_b a\\). Jadi ruas kanan sebenarnya adalah \\(\\log_8 9\\).",
+          hint: "Ubah ruas kanan terlebih dahulu menggunakan sifat \\(\\frac{\\log a}{\\log b} = \\log_b a\\). Setelah itu, pindahkan \\(-\\log_{8}(2x+6)\\) ke ruas kanan agar menjadi positif dan gabungkan menggunakan sifat penjumlahan logaritma (perkalian numerus).",
           pembahasan:
-            "Ruas kanan: \\(\\frac{\\log 9}{\\log 8} = \\log_8 9\\).<br>Persamaan menjadi:<br>\\(\\log_8 \\left( \\frac{x^2-4x-50}{2x+6} \\right) = \\log_8 9\\)<br><br>Samakan numerus:<br>\\(\\frac{x^2-4x-50}{2x+6} = 9\\)<br>\\(x^2 - 4x - 50 = 18x + 54\\)<br>\\(x^2 - 22x - 104 = 0\\)<br>\\((x - 26)(x + 4) = 0\\)<br>\\(x = 26\\) atau \\(x = -4\\).<br><br>Syarat numerus penyebut \\(2x+6 > 0 \\Rightarrow x > -3\\). Maka \\(x = -4\\) tidak memenuhi (TM).<br>Cek \\(x = 26\\) ke pembilang: \\(26^2 - 4(26) - 50 > 0\\) (Memenuhi).<br><strong>HP = {26}</strong>",
+            "Sederhanakan ruas kanan terlebih dahulu:<br>\\(\\frac{\\log 9}{\\log 8} = \\log_8 9\\)<br><br>Persamaan menjadi:<br>\\(\\log_{8}(x^{2}-4x-50) - \\log_{8}(2x+6) = \\log_8 9\\)<br><br>Pindahkan logaritma bernilai negatif ke ruas kanan:<br>\\(\\log_{8}(x^{2}-4x-50) = \\log_8 9 + \\log_{8}(2x+6)\\)<br><br>Gunakan sifat penjumlahan (perkalian numerus) di ruas kanan:<br>\\(\\log_{8}(x^{2}-4x-50) = \\log_{8}(9(2x+6))\\)<br>\\(\\log_{8}(x^{2}-4x-50) = \\log_{8}(18x+54)\\)<br><br>Samakan numerusnya:<br>\\(x^2 - 4x - 50 = 18x + 54\\)<br>\\(x^2 - 22x - 104 = 0\\)<br>\\((x - 26)(x + 4) = 0\\)<br>\\(x = 26\\) atau \\(x = -4\\).<br><br>Cek syarat numerus penyebut awal \\(2x+6 > 0 \\Rightarrow x > -3\\):<br>- Untuk \\(x = -4 < -3\\) (Tidak Memenuhi / TM).<br>- Untuk \\(x = 26\\): cek ke pembilang \\(26^2 - 4(26) - 50 = 522 > 0\\) (Memenuhi).<br><strong>HP = {26}</strong>",
         },
         {
           no: 21,
