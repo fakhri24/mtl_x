@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Latihan Fungsi Logaritma</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <style>
+      :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #34495e;
+        --accent-color: #3498db;
+        --hint-color: #f39c12;
+        --bg-color: #f8f9fa;
+        --card-bg: #ffffff;
+        --text-color: #333333;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        line-height: 1.6;
+        margin: 0;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        text-align: center;
+        color: var(--primary-color);
+        border-bottom: 2px solid var(--accent-color);
+        padding-bottom: 10px;
+        margin-bottom: 30px;
+      }
+
+      .question-card {
+        background-color: var(--card-bg);
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 25px;
+        margin-bottom: 30px;
+      }
+
+      .question-text {
+        font-size: 1.1em;
+        margin-bottom: 15px;
+      }
+
+      .options {
+        list-style-type: none;
+        padding-left: 0;
+      }
+
+      .options li {
+        margin-bottom: 8px;
+      }
+
+      .button-group {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+      }
+
+      button {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s;
+      }
+
+      .btn-hint {
+        background-color: var(--hint-color);
+        color: white;
+      }
+
+      .btn-hint:hover {
+        background-color: #d68910;
+      }
+
+      .btn-solve {
+        background-color: var(--accent-color);
+        color: white;
+      }
+
+      .btn-solve:hover {
+        background-color: #2980b9;
+      }
+
+      .hidden-content {
+        display: none;
+        margin-top: 15px;
+        padding: 15px;
+        border-left: 4px solid;
+        border-radius: 0 5px 5px 0;
+        background-color: var(--bg-color);
+      }
+
+      .hint-box {
+        border-left-color: var(--hint-color);
+      }
+
+      .solve-box {
+        border-left-color: var(--accent-color);
+      }
+
+      .step-title {
+        font-weight: bold;
+        color: var(--secondary-color);
+        margin-bottom: 10px;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Latihan Soal: Fungsi Logaritma</h1>
+
+      <div class="question-card" id="q1">
+        <div class="question-text">
+          <strong>Soal 1.</strong><br />
+          Perhatikan grafik fungsi logaritma yang diberikan (Asumsikan grafik
+          memotong sumbu-x di x = 2, melalui titik (3,1), (5,2), dan memiliki
+          asimtot tegak di x = 1).<br /><br />
+          Diberikan pernyataan berikut:<br />
+          (1) Grafik dihasilkan dari fungsi \( f(x) = \log_{2}(x - 1) \)<br />
+          (2) Fungsi tersebut melewati titik (4,2)<br />
+          (3) Asimtot tegak dari grafik adalah \( x = 1 \)<br />
+          (4) Grafik tidak memotong sumbu-\( x \)
+        </div>
+        <div>
+          Pernyataan yang benar adalah:<br />
+          <ul class="options">
+            <li>A. (1), (2) dan (3)</li>
+            <li>B. (1) dan (3)</li>
+            <li>C. (2) dan (4)</li>
+            <li>D. (4)</li>
+            <li>E. Semua benar</li>
+          </ul>
+        </div>
+
+        <div class="button-group">
+          <button class="btn-hint" onclick="toggleVisibility('hint1')">
+            💡 Hint
+          </button>
+          <button class="btn-solve" onclick="toggleVisibility('solve1')">
+            📝 Pembahasan
+          </button>
+        </div>
+
+        <div id="hint1" class="hidden-content hint-box">
+          <span class="step-title">Clue:</span>
+          Ambil setidaknya dua titik koordinat yang terlihat jelas memotong
+          tepat di garis grid pada grafik, lalu substitusikan nilai \(x\) dan
+          \(y\) tersebut ke dalam persamaan fungsi pada pernyataan (1) untuk
+          mengujinya. Ingat juga syarat numerus logaritma untuk mencari asimtot
+          tegaknya.
+        </div>
+
+        <div id="solve1" class="hidden-content solve-box">
+          <span class="step-title">Langkah-langkah Penyelesaian:</span>
+          <p>Mari kita analisis setiap pernyataan secara sistematis:</p>
+          <ol>
+            <li>
+              <strong>Uji Pernyataan (1) & (2):</strong> Berdasarkan pengamatan
+              visual grafik, kurva melewati titik koordinat \((2, 0)\), \((3,
+              1)\), dan \((5, 2)\). Mari kita substitusikan ke fungsi \( f(x) =
+              \log_{2}(x - 1) \):
+              <ul>
+                <li>
+                  Untuk \( x = 2 \Rightarrow f(2) = \log_{2}(2 - 1) =
+                  \log_{2}(1) = 0 \). (Cocok)
+                </li>
+                <li>
+                  Untuk \( x = 3 \Rightarrow f(3) = \log_{2}(3 - 1) =
+                  \log_{2}(2) = 1 \). (Cocok)
+                </li>
+                <li>
+                  Untuk \( x = 5 \Rightarrow f(5) = \log_{2}(5 - 1) =
+                  \log_{2}(4) = 2 \). (Cocok)
+                </li>
+              </ul>
+              Karena titik-titik tersebut memenuhi persamaan, maka
+              <strong>Pernyataan (1) Benar</strong>.<br />
+              Untuk pernyataan (2), jika \( x = 4 \), maka \( f(4) = \log_{2}(4
+              - 1) = \log_{2}(3) \approx 1.58 \), bukan 2. Jadi
+              <strong>Pernyataan (2) Salah</strong>.
+            </li>
+            <li>
+              <strong>Uji Pernyataan (3):</strong> Asimtot tegak terjadi ketika
+              nilai di dalam logaritma (numerus) mendekati nol. Untuk \( f(x) =
+              \log_{2}(x - 1) \), syarat batasnya adalah \( x - 1 > 0
+              \Rightarrow x > 1 \). Garis batas yang tidak pernah disentuh kurva
+              adalah \( x = 1 \). Maka, <strong>Pernyataan (3) Benar</strong>.
+            </li>
+            <li>
+              <strong>Uji Pernyataan (4):</strong> Dari titik uji pertama, kita
+              tahu grafik memotong sumbu-\( x \) di titik \((2, 0)\). Maka,
+              <strong>Pernyataan (4) Salah</strong>.
+            </li>
+          </ol>
+          <p>
+            <strong>Kesimpulan:</strong> Pernyataan yang benar adalah (1) dan
+            (3). <strong>Jawaban: B</strong>
+          </p>
+        </div>
+      </div>
+
+      <div class="question-card" id="q2">
+        <div class="question-text">
+          <strong>Soal 2.</strong><br />
+          Perhatikan grafik fungsi logaritma yang diberikan (Asumsikan grafik
+          melalui titik (0,0), (1,1), dan (4,2)).<br /><br />
+          Diberikan pernyataan berikut:<br />
+          (1) Grafik dihasilkan dari fungsi \( f(x) = \log_{2}(3x - 8) \)<br />
+          (2) Grafik dihasilkan dari fungsi \( f(x) = \log_{3}(2x + 1) \)<br />
+          (3) Asimtot tegak dari grafik adalah \( x = -\frac{1}{2} \)<br />
+          (4) Titik potong grafik terhadap sumbu-\( x \) adalah \((1,0)\)
+        </div>
+        <div>
+          Pernyataan yang benar adalah:<br />
+          <ul class="options">
+            <li>A. (1), (2) dan (3)</li>
+            <li>B. (2) dan (3)</li>
+            <li>C. (2) dan (4)</li>
+            <li>D. (4)</li>
+            <li>E. Semua benar</li>
+          </ul>
+        </div>
+
+        <div class="button-group">
+          <button class="btn-hint" onclick="toggleVisibility('hint2')">
+            💡 Hint
+          </button>
+          <button class="btn-solve" onclick="toggleVisibility('solve2')">
+            📝 Pembahasan
+          </button>
+        </div>
+
+        <div id="hint2" class="hidden-content hint-box">
+          <span class="step-title">Clue:</span>
+          Grafik jelas memotong titik pusat \((0,0)\). Substitusikan \(x = 0\)
+          ke fungsi pada pernyataan (1) dan (2). Fungsi logaritma tidak bisa
+          memproses nilai negatif di dalam tanda kurungnya (numerus).
+        </div>
+
+        <div id="solve2" class="hidden-content solve-box">
+          <span class="step-title">Langkah-langkah Penyelesaian:</span>
+          <p>
+            Sama seperti sebelumnya, kita analisis menggunakan titik potong
+            sistem koordinat:
+          </p>
+          <ol>
+            <li>
+              <strong>Uji Pernyataan (1) & (2):</strong> Dari grafik, kurva
+              memotong titik asal \((0,0)\).
+              <ul>
+                <li>
+                  Pernyataan (1): Jika \( x = 0 \), \( f(0) = \log_{2}(3(0) - 8)
+                  = \log_{2}(-8) \). Karena numerus logaritma tidak boleh
+                  negatif, fungsi ini tidak terdefinisi di \( x = 0 \).
+                  <strong>Pernyataan (1) Salah</strong>.
+                </li>
+                <li>
+                  Pernyataan (2): Mari kita uji beberapa titik untuk \( f(x) =
+                  \log_{3}(2x + 1) \). <br />Untuk \( x = 0 \Rightarrow f(0) =
+                  \log_{3}(1) = 0 \) (Cocok dengan titik \((0,0)\)). <br />Untuk
+                  \( x = 1 \Rightarrow f(1) = \log_{3}(2(1)+1) = \log_{3}(3) = 1
+                  \) (Cocok dengan titik \((1,1)\)). <br />Untuk \( x = 4
+                  \Rightarrow f(4) = \log_{3}(2(4)+1) = \log_{3}(9) = 2 \)
+                  (Cocok dengan titik \((4,2)\)). <br />Maka,
+                  <strong>Pernyataan (2) Benar</strong>.
+                </li>
+              </ul>
+            </li>
+            <li>
+              <strong>Uji Pernyataan (3):</strong> Mencari asimtot tegak dari
+              fungsi \( f(x) = \log_{3}(2x + 1) \). Syarat numerus: \( 2x + 1 >
+              0 \Rightarrow 2x > -1 \Rightarrow x > -\frac{1}{2} \). Garis yang
+              menjadi batas dan didekati grafik adalah \( x = -\frac{1}{2} \).
+              Maka, <strong>Pernyataan (3) Benar</strong>.
+            </li>
+            <li>
+              <strong>Uji Pernyataan (4):</strong> Titik potong sumbu-\( x \)
+              adalah ketika \( y = 0 \). Berdasarkan perhitungan sebelumnya,
+              titik potongnya berada di \((0,0)\), bukan \((1,0)\). Maka,
+              <strong>Pernyataan (4) Salah</strong>.
+            </li>
+          </ol>
+          <p>
+            <strong>Kesimpulan:</strong> Pernyataan yang benar adalah (2) dan
+            (3). <strong>Jawaban: B</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Fungsi sederhana untuk menyembunyikan/menampilkan elemen berdasarkan ID
+      function toggleVisibility(elementId) {
+        const element = document.getElementById(elementId);
+        if (element.style.display === "none" || element.style.display === "") {
+          element.style.display = "block";
+          // Efek transisi sederhana bisa ditambahkan menggunakan CSS animasi jika diperlukan
+        } else {
+          element.style.display = "none";
+        }
+      }
+    </script>
+  </body>
+</html>
